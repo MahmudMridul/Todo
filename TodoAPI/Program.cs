@@ -18,6 +18,19 @@ namespace TodoAPI
                 op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
                 );
 
+
+            // Add CORS
+            builder.Services.AddCors(ops => 
+            {
+                ops.AddPolicy("AllowAll", policy =>
+                {
+                    policy
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin();
+                });
+            });
+
             // Add controller options
             builder.Services.AddControllers(ops => 
             {
@@ -37,6 +50,8 @@ namespace TodoAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
