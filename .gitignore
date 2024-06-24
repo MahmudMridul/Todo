@@ -1,0 +1,8 @@
+#ui
+todo-ui/node_modules/*
+todo-ui/build/*
+
+#api
+TodoAPI/.vs/*
+TodoAPI/bin/*
+TodoAPI/obj/*
