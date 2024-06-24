@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TodoAPI.Db;
 
@@ -17,7 +18,11 @@ namespace TodoAPI
                 op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
                 );
 
-            builder.Services.AddControllers();
+            // Add controller options
+            builder.Services.AddControllers(ops => 
+            {
+                ops.Filters.Add(new ProducesAttribute("application/json"));
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
