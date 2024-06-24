@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using TodoAPI.Db;
 using TodoAPI.Models;
@@ -21,16 +22,58 @@ namespace TodoAPI.Controllers
         }
         // GET: api/<ItemController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<ApiResponse>> GetAllItems() 
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                IEnumerable<Item> items = await _db.Items.ToListAsync();
+                if(items.Count() == 0)
+                {
+                    response.Message = "No items found";
+                }
+                else
+                {
+                    response.Message = "Retrieved items";
+                }
+                response.Data = items;
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.OK;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
         }
 
         // GET api/<ItemController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<ApiResponse>> GetItem(int id)
         {
-            return "value";
+            try
+            {
+                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Id == id);
+                if (item == null)
+                {
+                    response.Message = "No items found";
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return BadRequest(response);
+                }
+                
+                response.Message = "Retrieved item";    
+                response.Data = item;
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.OK;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
         }
 
         // POST api/<ItemController>
