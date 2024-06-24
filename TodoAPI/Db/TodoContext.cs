@@ -10,6 +10,6 @@ namespace TodoAPI.Db
             
         }
 
-        DbSet<Item> Items { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }
