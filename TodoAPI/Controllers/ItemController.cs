@@ -78,7 +78,7 @@ namespace TodoAPI.Controllers
 
         // POST api/<ItemController>
         [HttpPost]
-        public async Task<ActionResult<ApiResponse>> CreateItem(ItemDTO item)
+        public async Task<ActionResult<ApiResponse>> CreateItem(ItemCreateDTO item)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace TodoAPI.Controllers
         }
 
         // DELETE api/<ItemController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<ActionResult<ApiResponse>> DeleteItem(string title)
         {
             try
