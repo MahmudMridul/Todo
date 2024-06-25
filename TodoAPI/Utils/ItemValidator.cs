@@ -5,7 +5,7 @@ namespace TodoAPI.Utils
 {
     public static class ItemValidator
     {
-        public static bool IsValidItem(ItemDTO item, out string message)
+        public static bool IsValidItem(ItemCreateDTO item, out string message)
         {
             if(item == null)
             {
