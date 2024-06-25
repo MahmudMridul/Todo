@@ -1,6 +1,6 @@
 ﻿namespace TodoAPI.Models.DTOs
 {
-    public class ItemDTO
+    public class ItemCreateDTO
     {
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
