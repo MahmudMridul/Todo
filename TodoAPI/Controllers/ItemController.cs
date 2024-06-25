@@ -78,23 +78,17 @@ namespace TodoAPI.Controllers
 
         // POST api/<ItemController>
         [HttpPost]
-        public async Task<ActionResult<ApiResponse>> CreateItem(ItemCreateDTO item)
+        public async Task<ActionResult<ApiResponse>> Create(ItemCreateDTO item)
         {
             try
             {
                 string message = "";
                 IEnumerable<Item> items = await _db.Items.ToListAsync();
 
-                if(!ItemValidator.IsValidItem(item, out message))
+                if(!ItemValidator.IsValidItem(item, items, out message))
                 {
                     response.StatusCode = HttpStatusCode.BadRequest;
                     response.Message = message;
-                    return BadRequest(response);
-                }
-                if(!ItemValidator.IsTitleUnique(item.Title, items))
-                {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Message = "An item with same title already exists";
                     return BadRequest(response);
                 }
 
@@ -126,14 +120,41 @@ namespace TodoAPI.Controllers
         }
 
         // PUT api/<ItemController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<ActionResult<ApiResponse>> Update(int id, ItemUpdateDTO item)
         {
+            string message = "";
+            IEnumerable<Item> items = await _db.Items.ToListAsync();
+
+            if (!ItemValidator.IsValidItem(id, item, items, out message))
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.Message = message;
+                return BadRequest(response);
+            }
+
+            Item? dbItem = await _db.Items.FindAsync(id);
+
+            dbItem.Title = item.Title;
+            dbItem.Description = item.Description;
+            dbItem.Comment = item.Comment;
+            dbItem.Deadline = item.Deadline;
+            dbItem.IsCompleted = item.IsCompleted;
+            dbItem.UpdatedDate = DateTime.Now;
+
+            _db.Items.Update(dbItem);
+            await _db.SaveChangesAsync();
+
+            response.Data = dbItem;
+            response.StatusCode = HttpStatusCode.OK;
+            response.Message = "Item updated";
+            response.IsSuccess = true;
+            return Ok(response);
         }
 
         // DELETE api/<ItemController>/5
         [HttpDelete]
-        public async Task<ActionResult<ApiResponse>> DeleteItem(string title)
+        public async Task<ActionResult<ApiResponse>> Delete(string title)
         {
             try
             {
