@@ -5,7 +5,7 @@ namespace TodoAPI.Utils
 {
     public static class ItemValidator
     {
-        public static bool IsValidItem(ItemCreateDTO item, out string message)
+        public static bool IsValidItem(ItemCreateDTO item, IEnumerable<Item> items, out string message)
         {
             if(item == null)
             {
@@ -17,7 +17,14 @@ namespace TodoAPI.Utils
                 message = "Invalid title given";
                 return false;
             }
-            if(!string.IsNullOrEmpty(item.Description) && item.Description.Trim().Length == 0)
+
+            Item? dbItem = items.FirstOrDefault(obj => obj.Title == item.Title);
+            if(dbItem != null) 
+            {
+                message = "An item with same title already exists";
+                return false;
+            }
+            if (!string.IsNullOrEmpty(item.Description) && item.Description.Trim().Length == 0)
             {
                 message = "Only white space given";
                 return false;
@@ -44,14 +51,57 @@ namespace TodoAPI.Utils
             return true;
         }
 
-        public static bool IsTitleUnique(string title, IEnumerable<Item> items)
+        public static bool IsValidItem(int id, ItemUpdateDTO item, IEnumerable<Item> items, out string message)
         {
-            Item? item = items.FirstOrDefault(obj => obj.Title == title);
-            if(item == null)
+            if (item == null)
             {
-                return true;
+                message = "Item is empty";
+                return false;
             }
-            return false;
+
+            Item? dbItem = items.FirstOrDefault(obj => obj.Id == id);
+            if (dbItem == null)
+            {
+                message = "No such item found";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(item.Title))
+            {
+                message = "Invalid title given";
+                return false;
+            }
+
+            dbItem = items.FirstOrDefault(obj => obj.Title == item.Title);
+            if (dbItem != null && dbItem.Id != id)
+            {
+                message = "An item with same title already exists";
+                return false;
+            }
+            if (!string.IsNullOrEmpty(item.Description) && item.Description.Trim().Length == 0)
+            {
+                message = "Only white space given";
+                return false;
+            }
+            if (!string.IsNullOrEmpty(item.Comment) && item.Comment.Trim().Length == 0)
+            {
+                message = "Only white space given";
+                return false;
+            }
+            if (item.Deadline == null)
+            {
+                message = "Invalid deadline given";
+                return false;
+            }
+
+            DateTime minDate = DateTime.Now.AddMinutes(5);
+            if (item.Deadline < minDate)
+            {
+                message = "Deadline is too short";
+                return false;
+            }
+
+            message = "Success";
+            return true;
         }
     }
 }
