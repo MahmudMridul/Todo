@@ -1,8 +1,9 @@
-﻿using TodoAPI.Models.DTOs;
+﻿using TodoAPI.Models;
+using TodoAPI.Models.DTOs;
 
 namespace TodoAPI.Utils
 {
-    public static class ItemValidation
+    public static class ItemValidator
     {
         public static bool IsValidItem(ItemDTO item, out string message)
         {
@@ -41,6 +42,16 @@ namespace TodoAPI.Utils
 
             message = "Success";
             return true;
+        }
+
+        public static bool IsTitleUnique(string title, IEnumerable<Item> items)
+        {
+            Item? item = items.FirstOrDefault(obj => obj.Title == title);
+            if(item == null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

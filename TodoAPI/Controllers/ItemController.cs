@@ -83,34 +83,39 @@ namespace TodoAPI.Controllers
             try
             {
                 string message = "";
-                if (ItemValidation.IsValidItem(item, out message))
-                {
-                    Item newItem = new Item()
-                    {
-                        Title = item.Title,
-                        Description = item.Description,
-                        Comment = item.Comment,
-                        CreatedDate = DateTime.Now,
-                        UpdatedDate = DateTime.Now,
-                        Deadline = item.Deadline,
-                        IsCompleted = false,
-                    };
-                    await _db.Items.AddAsync(newItem);
-                    await _db.SaveChangesAsync();
+                IEnumerable<Item> items = await _db.Items.ToListAsync();
 
-                    response.Data = newItem;
-                    response.StatusCode = HttpStatusCode.OK;
-                    response.Message = "Item added";
-                    response.IsSuccess = true;
-
-                    return Ok(response);
-                }
-                else
+                if(!ItemValidator.IsValidItem(item, out message))
                 {
                     response.StatusCode = HttpStatusCode.BadRequest;
                     response.Message = message;
                     return BadRequest(response);
                 }
+                if(!ItemValidator.IsTitleUnique(item.Title, items))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = "An item with same title already exists";
+                    return BadRequest(response);
+                }
+
+                Item newItem = new Item()
+                {
+                    Title = item.Title,
+                    Description = item.Description,
+                    Comment = item.Comment,
+                    CreatedDate = DateTime.Now,
+                    UpdatedDate = DateTime.Now,
+                    Deadline = item.Deadline,
+                    IsCompleted = false,
+                };
+                await _db.Items.AddAsync(newItem);
+                await _db.SaveChangesAsync();
+
+                response.Data = newItem;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Message = "Item added";
+                response.IsSuccess = true;
+                return Ok(response);
             }
             catch (Exception ex)
             {
@@ -128,8 +133,33 @@ namespace TodoAPI.Controllers
 
         // DELETE api/<ItemController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<ApiResponse>> DeleteItem(string title)
         {
+            try
+            {
+                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Title == title);
+
+                if (item == null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = "No such item found";
+                    return BadRequest(response);
+                }
+                _db.Remove(item);
+                await _db.SaveChangesAsync();
+
+                response.Data = item;
+                response.StatusCode = HttpStatusCode.OK;
+                response.IsSuccess = true;
+                response.Message = "Item deleted";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
         }
     }
 }
