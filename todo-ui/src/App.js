@@ -15,10 +15,11 @@ export default function App() {
       <main className='container p-2'>
          <Header headerText={"Todos"} />
          {todos.map((item, index) => {
-            const { title, description, comment, deadline, isCompleted } = item;
+            const { id, title, description, comment, deadline, isCompleted } = item;
             return (
                <ListItem
                   key={index}
+                  id={id}
                   title={title}
                   desc={description}
                   comm={comment}

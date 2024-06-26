@@ -1,13 +1,45 @@
 import React from "react";
 import { formatDateString } from "../todoUtils";
-import { useDispatch } from "react-redux";
-import { getAllTodos, removeItem } from "../todoSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+   getAllTodos,
+   removeItem,
+   setState,
+   toggleIsCompleted,
+} from "../todoSlice";
 
-export default function ListItem({ title, desc, comm, deadline, completed }) {
+export default function ListItem({
+   id,
+   title,
+   desc,
+   comm,
+   deadline,
+   completed,
+}) {
    const dispatch = useDispatch();
+   const states = useSelector((store) => store.todo);
+   const { todos } = states;
 
    function deleteItem() {
       dispatch(removeItem({ title })).then(() => dispatch(getAllTodos()));
+   }
+
+   function toggleCompleted() {
+      const updated = todos.map((item, index) => {
+         if (item.id === id) {
+            return {
+               ...item,
+               isCompleted: !completed,
+            };
+         }
+         return item;
+      });
+      dispatch(setState("todos", updated));
+      const obj = {
+         id,
+         status: !completed,
+      };
+      dispatch(toggleIsCompleted(obj)).then(() => dispatch(getAllTodos()));
    }
 
    return (
@@ -24,7 +56,10 @@ export default function ListItem({ title, desc, comm, deadline, completed }) {
             {formatDateString(deadline)}
          </div>
          <hr className="mb-4"></hr>
-         <button className="w-36 p-1 bg-green-700 rounded-md text-white font-semibold">
+         <button
+            className="w-36 p-1 bg-green-700 rounded-md text-white font-semibold"
+            onClick={toggleCompleted}
+         >
             {completed ? "Mark as Pending" : "Mark as Done"}
          </button>
          <button className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold">

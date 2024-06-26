@@ -48,6 +48,28 @@ export const removeItem = createAsyncThunk(
    }
 );
 
+export const toggleIsCompleted = createAsyncThunk(
+   "app/toggleIsCompleted",
+   async (obj, { dispatch, getState }) => {
+      try {
+         const url = `${urls.toggleDone}`;
+         const response = fetch(url, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json"
+            },
+            body: JSON.stringify(obj),
+         });
+         const data = await response.json();
+         return data;
+      }
+      catch (error) {
+         console.error("Error from toggleIsCompleted: ", error);
+      }
+   }
+);
+
 export const todoSlice = createSlice({
    name: "todo",
    initialState,
@@ -83,6 +105,16 @@ export const todoSlice = createSlice({
 
          })
          .addCase(removeItem.rejected, (state, action) => {
+
+         })
+
+         .addCase(toggleIsCompleted.pending, (state, action) => {
+
+         })
+         .addCase(toggleIsCompleted.fulfilled, (state, action) => {
+
+         })
+         .addCase(toggleIsCompleted.rejected, (state, action) => {
 
          })
    }
