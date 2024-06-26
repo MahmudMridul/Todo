@@ -1,7 +1,8 @@
 const api = process.env.REACT_APP_API;
 
 export const urls = {
-   allTodos: `${api}Item`,
+   allTodos: `${api}`,
+   remove: `${api}?title=`,
 };
 
 export function formatDateString(dateString) {

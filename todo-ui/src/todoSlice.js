@@ -26,6 +26,28 @@ export const getAllTodos = createAsyncThunk(
    }
 );
 
+export const removeItem = createAsyncThunk(
+   "app/removeItem",
+   async (obj, { dispatch, getState }) => {
+      try {
+         const { title } = obj;
+         const url = `${urls.remove}${title}`;
+         const response = await fetch(url, {
+            method: "DELETE",
+            headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json"
+            }
+         });
+         const data = await response.json();
+         return data;
+      }
+      catch (error) {
+         console.error("Error from removeItem: ", error);
+      }
+   }
+);
+
 export const todoSlice = createSlice({
    name: "todo",
    initialState,
@@ -51,6 +73,16 @@ export const todoSlice = createSlice({
             state.todos = action.payload.data;
          })
          .addCase(getAllTodos.rejected, (state, action) => {
+
+         })
+
+         .addCase(removeItem.pending, (state, action) => {
+
+         })
+         .addCase(removeItem.fulfilled, (state, action) => {
+
+         })
+         .addCase(removeItem.rejected, (state, action) => {
 
          })
    }
