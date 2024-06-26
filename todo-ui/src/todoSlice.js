@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { urls } from "./todoUtils";
 
 const initialState = {
    todos: [],
@@ -7,7 +8,21 @@ const initialState = {
 export const getAllTodos = createAsyncThunk(
    "app/getAllTodos",
    async (obj, { dispatch, getState }) => {
-
+      try {
+         const url = urls.allTodos;
+         const response = await fetch(url, {
+            method: "GET",
+            headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json"
+            }
+         });
+         const data = await response.json();
+         return data;
+      }
+      catch (error) {
+         console.error("Error from getAllTodos: ", error);
+      }
    }
 );
 
@@ -26,6 +41,18 @@ export const todoSlice = createSlice({
             state[name] = value;
          }
       }
+   },
+   extraReducers: (builder) => {
+      builder
+         .addCase(getAllTodos.pending, (state, action) => {
+
+         })
+         .addCase(getAllTodos.fulfilled, (state, action) => {
+            state.todos = action.payload.data;
+         })
+         .addCase(getAllTodos.rejected, (state, action) => {
+
+         })
    }
 });
 
