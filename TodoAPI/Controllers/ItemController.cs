@@ -21,7 +21,7 @@ namespace TodoAPI.Controllers
             response = new ApiResponse();
         }
         // GET: api/<ItemController>
-        [HttpGet]
+        [HttpGet(Name = "GetAllItems")]
         public async Task<ActionResult<ApiResponse>> GetAllItems() 
         {
             try
@@ -49,7 +49,7 @@ namespace TodoAPI.Controllers
         }
 
         // GET api/<ItemController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetItem")]
         public async Task<ActionResult<ApiResponse>> GetItem(int id)
         {
             try
@@ -77,8 +77,8 @@ namespace TodoAPI.Controllers
         }
 
         // POST api/<ItemController>
-        [HttpPost]
-        public async Task<ActionResult<ApiResponse>> Create(ItemCreateDTO item)
+        [HttpPost(Name = "Create")]
+        public async Task<ActionResult<ApiResponse>> Create([FromBody] ItemCreateDTO item)
         {
             try
             {
@@ -120,41 +120,50 @@ namespace TodoAPI.Controllers
         }
 
         // PUT api/<ItemController>/5
-        [HttpPut]
+        [HttpPut(Name = "Update")]
         public async Task<ActionResult<ApiResponse>> Update(int id, ItemUpdateDTO item)
         {
-            string message = "";
-            IEnumerable<Item> items = await _db.Items.ToListAsync();
-
-            if (!ItemValidator.IsValidItem(id, item, items, out message))
+            try
             {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.Message = message;
+                string message = "";
+                IEnumerable<Item> items = await _db.Items.ToListAsync();
+
+                if (!ItemValidator.IsValidItem(id, item, items, out message))
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = message;
+                    return BadRequest(response);
+                }
+
+                Item? dbItem = await _db.Items.FindAsync(id);
+
+                dbItem.Title = item.Title;
+                dbItem.Description = item.Description;
+                dbItem.Comment = item.Comment;
+                dbItem.Deadline = item.Deadline;
+                dbItem.IsCompleted = item.IsCompleted;
+                dbItem.UpdatedDate = DateTime.Now;
+
+                _db.Items.Update(dbItem);
+                await _db.SaveChangesAsync();
+
+                response.Data = dbItem;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Message = "Item updated";
+                response.IsSuccess = true;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
                 return BadRequest(response);
             }
-
-            Item? dbItem = await _db.Items.FindAsync(id);
-
-            dbItem.Title = item.Title;
-            dbItem.Description = item.Description;
-            dbItem.Comment = item.Comment;
-            dbItem.Deadline = item.Deadline;
-            dbItem.IsCompleted = item.IsCompleted;
-            dbItem.UpdatedDate = DateTime.Now;
-
-            _db.Items.Update(dbItem);
-            await _db.SaveChangesAsync();
-
-            response.Data = dbItem;
-            response.StatusCode = HttpStatusCode.OK;
-            response.Message = "Item updated";
-            response.IsSuccess = true;
-            return Ok(response);
         }
 
         // DELETE api/<ItemController>/5
-        [HttpDelete]
-        public async Task<ActionResult<ApiResponse>> Delete(string title)
+        [HttpDelete(Name = "Delete")]
+        public async Task<ActionResult<ApiResponse>> Delete([FromBody] string title)
         {
             try
             {
@@ -173,6 +182,39 @@ namespace TodoAPI.Controllers
                 response.StatusCode = HttpStatusCode.OK;
                 response.IsSuccess = true;
                 response.Message = "Item deleted";
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.StatusCode = HttpStatusCode.InternalServerError;
+                response.Message = ex.Message;
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("status", Name = "UpdateCompletionStatus")]
+        public async Task<ActionResult<ApiResponse>> UpdateCompletionStatus([FromBody] StatusDTO dto)
+        {
+            try
+            {
+                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Id == dto.Id);
+                if (item == null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.Message = "No such item found";
+                    return BadRequest(response);
+                }
+
+                item.IsCompleted = dto.Status;
+                item.UpdatedDate = DateTime.Now;
+
+                _db.Items.Update(item);
+                await _db.SaveChangesAsync();
+
+                response.Data = item;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Message = "Item's completion status updated";
+                response.IsSuccess = true;
                 return Ok(response);
             }
             catch (Exception ex)
