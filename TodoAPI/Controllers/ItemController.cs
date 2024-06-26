@@ -163,7 +163,7 @@ namespace TodoAPI.Controllers
 
         // DELETE api/<ItemController>/5
         [HttpDelete(Name = "Delete")]
-        public async Task<ActionResult<ApiResponse>> Delete([FromBody] string title)
+        public async Task<ActionResult<ApiResponse>> Delete(string title)
         {
             try
             {
