@@ -1,33 +1,31 @@
-import React, { useEffect } from 'react'
-import Header from './components/Header'
-import ListItem from './components/ListItem'
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllTodos } from './todoSlice';
+import React from 'react';
+import Header from './components/Header';
+import Popup from './components/Popup';
+import List from './components/List';
+import { useNavigate } from 'react-router-dom';
 
 export default function App() {
-   const dispatch = useDispatch();
-   const states = useSelector(store => store.todo);
-   const { todos } = states;
-   useEffect(() => {
-      dispatch(getAllTodos());
-   }, []);
+   const naviage = useNavigate();
+
+   function gotoAddPage() {
+      naviage("/add");
+   }
+
    return (
       <main className='container p-2'>
+         <Popup />
          <Header headerText={"Todos"} />
-         {todos.map((item, index) => {
-            const { id, title, description, comment, deadline, isCompleted } = item;
-            return (
-               <ListItem
-                  key={index}
-                  id={id}
-                  title={title}
-                  desc={description}
-                  comm={comment}
-                  deadline={deadline}
-                  completed={isCompleted}
-               />
-            );
-         })}
+         <hr className="mb-4"></hr>
+         <div className="w-full flex justify-end">
+            <button
+               className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold"
+               onClick={gotoAddPage}
+            >
+               Add
+            </button>
+         </div>
+         <hr className="my-4"></hr>
+         <List />
       </main>
    )
 }
