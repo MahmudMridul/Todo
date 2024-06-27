@@ -7,6 +7,7 @@ import {
    setState,
    toggleIsCompleted,
 } from "../todoSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function ListItem({
    id,
@@ -19,6 +20,8 @@ export default function ListItem({
    const dispatch = useDispatch();
    const states = useSelector((store) => store.todo);
    const { todos } = states;
+
+   const navigate = useNavigate();
 
    function deleteItem() {
       dispatch(removeItem({ title })).then(() => dispatch(getAllTodos()));
@@ -40,6 +43,10 @@ export default function ListItem({
          status: !completed,
       };
       dispatch(toggleIsCompleted(obj)).then(() => dispatch(getAllTodos()));
+   }
+
+   function gotoEditPage() {
+      navigate("/edit");
    }
 
    return (
@@ -64,7 +71,10 @@ export default function ListItem({
          >
             {completed ? "Mark as Pending" : "Mark as Done"}
          </button>
-         <button className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold">
+         <button
+            className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold"
+            onClick={gotoEditPage}
+         >
             Edit
          </button>
          <button
