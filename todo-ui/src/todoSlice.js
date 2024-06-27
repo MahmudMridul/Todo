@@ -3,6 +3,10 @@ import { urls } from "./todoUtils";
 
 const initialState = {
    todos: [],
+
+   popupMsg: "Popup message",
+   popupOpen: true,
+   popupStatus: "error", // default, success, warning, info, error
 };
 
 export const getAllTodos = createAsyncThunk(
@@ -92,7 +96,13 @@ export const todoSlice = createSlice({
 
          })
          .addCase(getAllTodos.fulfilled, (state, action) => {
-            state.todos = action.payload.data;
+            console.log(action.payload);
+            if (action.payload && "data" in action.payload) {
+               state.todos = action.payload.data;
+            }
+            else {
+               console.error("Error");
+            }
          })
          .addCase(getAllTodos.rejected, (state, action) => {
 
