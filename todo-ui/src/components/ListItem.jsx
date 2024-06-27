@@ -25,7 +25,7 @@ export default function ListItem({
    }
 
    function toggleCompleted() {
-      const updated = todos.map((item, index) => {
+      const updated = todos.map((item) => {
          if (item.id === id) {
             return {
                ...item,
@@ -57,7 +57,9 @@ export default function ListItem({
          </div>
          <hr className="mb-4"></hr>
          <button
-            className="w-36 p-1 bg-green-700 rounded-md text-white font-semibold"
+            className={`w-36 p-1 ${
+               completed ? "bg-amber-600" : "bg-green-700"
+            }  rounded-md text-white font-semibold`}
             onClick={toggleCompleted}
          >
             {completed ? "Mark as Pending" : "Mark as Done"}
