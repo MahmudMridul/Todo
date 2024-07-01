@@ -49,8 +49,8 @@ export default function AddItem() {
          comment,
          deadline: date,
       };
-      console.log(obj);
-      // dispatch(addItem(obj));
+      console.log("handleAdd", obj);
+      dispatch(addItem(obj));
    }
 
    return (
