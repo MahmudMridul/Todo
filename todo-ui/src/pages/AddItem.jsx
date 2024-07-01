@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../todoSlice";
 import { getCurrentTime, getTodayDate } from "../todoUtils";
+import Popup from "../components/Popup";
+import Loading from "../components/Loading";
 
 export default function AddItem() {
    const dispatch = useDispatch();
@@ -55,6 +57,8 @@ export default function AddItem() {
 
    return (
       <main className="container p-2 flex">
+         <Popup />
+         <Loading />
          <div className="grid grid-cols-6 gap-y-5 gap-x-2 mt-10">
             <label className="col-span-2 text-xl">Title *</label>
             <input
