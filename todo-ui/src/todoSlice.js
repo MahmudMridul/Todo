@@ -4,9 +4,11 @@ import { urls } from "./todoUtils";
 const initialState = {
    todos: [],
 
-   popupMsg: "Popup message",
-   popupOpen: true,
-   popupStatus: "error", // default, success, warning, info, error
+   popupMsg: "",
+   popupOpen: false,
+   popupStatus: "default", // default, success, warning, info, error
+
+   isLoading: false,
 };
 
 export const getAllTodos = createAsyncThunk(

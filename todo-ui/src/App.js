@@ -3,6 +3,7 @@ import Header from './components/Header';
 import Popup from './components/Popup';
 import List from './components/List';
 import { useNavigate } from 'react-router-dom';
+import Loading from './components/Loading';
 
 export default function App() {
    const naviage = useNavigate();
@@ -14,6 +15,7 @@ export default function App() {
    return (
       <main className='container p-2'>
          <Popup />
+         <Loading />
          <Header headerText={"Todos"} />
          <hr className="mb-4"></hr>
          <div className="w-full flex justify-end">
