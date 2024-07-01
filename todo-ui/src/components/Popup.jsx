@@ -10,14 +10,14 @@ export default function Popup() {
    useEffect(() => {
       const timer = setTimeout(() => {
          dispatch(setState("popupOpen", false));
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timer);
    }, [popupOpen]);
 
    let popBgColor = "bg-gray-100";
    if (popupStatus === "success") {
-      popBgColor = "bg-green-700";
+      popBgColor = "bg-lime-700";
    } else if (popupStatus === "warning") {
       popBgColor = "bg-amber-600";
    } else if (popupStatus === "info") {
@@ -33,7 +33,7 @@ export default function Popup() {
          } justify-end`}
       >
          <div
-            className={`w-max h-max p-4 rounded-xl ${popBgColor} text-white font-medium`}
+            className={`w-max h-max px-4 py-1 rounded-xl ${popBgColor} text-white font-medium`}
          >
             {popupMsg}
          </div>
