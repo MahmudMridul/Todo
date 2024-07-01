@@ -117,18 +117,25 @@ export const todoSlice = createSlice({
    extraReducers: (builder) => {
       builder
          .addCase(getAllTodos.pending, (state, action) => {
-
+            state.isLoading = true;
          })
          .addCase(getAllTodos.fulfilled, (state, action) => {
             if (action.payload && "data" in action.payload) {
-               state.todos = action.payload.data;
+               const { data, isSuccess, message } = action.payload;
+               state.todos = data;
+               if (isSuccess === false) {
+                  state.popupStatus = "error";
+                  state.popupMsg = message;
+                  state.popupOpen = true;
+               }
             }
             else {
                console.error("Error");
             }
+            state.isLoading = false;
          })
          .addCase(getAllTodos.rejected, (state, action) => {
-
+            state.isLoading = false;
          })
 
          .addCase(removeItem.pending, (state, action) => {
@@ -152,13 +159,22 @@ export const todoSlice = createSlice({
          })
 
          .addCase(addItem.pending, (state, action) => {
-
+            state.isLoading = true;
          })
          .addCase(addItem.fulfilled, (state, action) => {
-
+            if (action.payload && "isSuccess" in action.payload) {
+               const { isSuccess, message } = action.payload;
+               state.popupStatus = isSuccess === true ? "success" : "error";
+               state.popupMsg = message;
+               state.popupOpen = true;
+            }
+            else {
+               console.error("Error");
+            }
+            state.isLoading = false;
          })
          .addCase(addItem.rejected, (state, action) => {
-
+            state.isLoading = false;
          })
    }
 });
