@@ -13,7 +13,7 @@ export const getAllTodos = createAsyncThunk(
    "app/getAllTodos",
    async (obj, { dispatch, getState }) => {
       try {
-         const url = urls.allTodos;
+         const url = urls.common;
          const response = await fetch(url, {
             method: "GET",
             headers: {
@@ -74,6 +74,28 @@ export const toggleIsCompleted = createAsyncThunk(
    }
 );
 
+export const addItem = createAsyncThunk(
+   "app/addItem",
+   async (obj, { dispatch, getState }) => {
+      try {
+         const url = `${urls.common}`;
+         const response = fetch(url, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json"
+            },
+            body: JSON.stringify(obj),
+         });
+         const data = await response.json();
+         return data;
+      }
+      catch (error) {
+         console.error("Error from addItem: ", error);
+      }
+   }
+);
+
 export const todoSlice = createSlice({
    name: "todo",
    initialState,
@@ -96,7 +118,6 @@ export const todoSlice = createSlice({
 
          })
          .addCase(getAllTodos.fulfilled, (state, action) => {
-            console.log(action.payload);
             if (action.payload && "data" in action.payload) {
                state.todos = action.payload.data;
             }
@@ -125,6 +146,16 @@ export const todoSlice = createSlice({
 
          })
          .addCase(toggleIsCompleted.rejected, (state, action) => {
+
+         })
+
+         .addCase(addItem.pending, (state, action) => {
+
+         })
+         .addCase(addItem.fulfilled, (state, action) => {
+
+         })
+         .addCase(addItem.rejected, (state, action) => {
 
          })
    }
