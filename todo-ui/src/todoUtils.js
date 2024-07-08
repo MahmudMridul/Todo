@@ -32,3 +32,8 @@ export function formatDateString(dateString) {
 
    return `${hours}:${minutes} ${period} ${month} ${day}, ${year}`;
 }
+
+export function splitDateTime(dateTimeString) {
+   const [date, time] = dateTimeString.split('T');
+   return [date, time.slice(0, 5)];
+}
