@@ -1,6 +1,18 @@
 import React from "react";
+import { store } from "../store";
+import { useLoaderData } from "react-router-dom";
+
+export function loader({ params }) {
+   const id = parseInt(params.id, 10);
+   const todos = store.getState().todo.todos;
+   const item = todos.find((obj) => obj.id === id);
+   return item === undefined ? null : item;
+}
 
 export default function EditItem() {
+   const { id, title, description, comment, deadline, isCompleted } =
+      useLoaderData();
+   console.log(title, description, comment);
    return (
       <main className="container p-2 flex">
          <div className="grid grid-cols-6 gap-y-5 mt-10">

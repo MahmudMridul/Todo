@@ -46,7 +46,7 @@ export default function ListItem({
    }
 
    function gotoEditPage() {
-      navigate("/edit");
+      navigate(`/edit/${id}`);
    }
 
    return (

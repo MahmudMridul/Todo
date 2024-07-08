@@ -7,7 +7,7 @@ import { store } from './store';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import AddItem from './pages/AddItem';
 import EditItem from './pages/EditItem';
-
+import { loader as editLoader } from './pages/EditItem';
 
 const router = createBrowserRouter([
    {
@@ -19,8 +19,9 @@ const router = createBrowserRouter([
       element: <AddItem />
    },
    {
-      path: "/edit",
-      element: <EditItem />
+      path: "/edit/:id",
+      element: <EditItem />,
+      loader: editLoader
    }
 ]);
 
