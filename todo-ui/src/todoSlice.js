@@ -59,7 +59,7 @@ export const toggleIsCompleted = createAsyncThunk(
    async (obj, { dispatch, getState }) => {
       try {
          const url = `${urls.toggleDone}`;
-         const response = fetch(url, {
+         const response = await fetch(url, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export const addItem = createAsyncThunk(
    async (obj, { dispatch, getState }) => {
       try {
          const url = `${urls.common}`;
-         const response = fetch(url, {
+         const response = await fetch(url, {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -94,6 +94,28 @@ export const addItem = createAsyncThunk(
       }
       catch (error) {
          console.error("Error from addItem: ", error);
+      }
+   }
+);
+
+export const updateItem = createAsyncThunk(
+   "app/updateItem",
+   async (obj, { dispatch, getState }) => {
+      try {
+         const url = `${urls.update}${obj.id}`;
+         const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json",
+            },
+            body: JSON.stringify(obj),
+         });
+         const data = await response.json();
+         return data;
+      }
+      catch (error) {
+         console.error("Error from updateItem: ", error);
       }
    }
 );
@@ -174,6 +196,25 @@ export const todoSlice = createSlice({
             state.isLoading = false;
          })
          .addCase(addItem.rejected, (state, action) => {
+            state.isLoading = false;
+         })
+
+         .addCase(updateItem.pending, (state, action) => {
+            state.isLoading = true;
+         })
+         .addCase(updateItem.fulfilled, (state, action) => {
+            if (action.payload && "isSuccess" in action.payload) {
+               const { isSuccess, message } = action.payload;
+               state.popupStatus = isSuccess === true ? "success" : "error";
+               state.popupMsg = message;
+               state.popupOpen = true;
+            }
+            else {
+               console.error("Error");
+            }
+            state.isLoading = false;
+         })
+         .addCase(updateItem.rejected, (state, action) => {
             state.isLoading = false;
          })
    }

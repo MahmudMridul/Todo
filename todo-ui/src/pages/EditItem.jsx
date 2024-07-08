@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { store } from "../store";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import { splitDateTime } from "../todoUtils";
+import { combineDateTime, splitDateTime } from "../todoUtils";
+import { useDispatch } from "react-redux";
+import { getAllTodos, updateItem } from "../todoSlice";
 
 export function loader({ params }) {
    const id = parseInt(params.id, 10);
@@ -15,6 +17,7 @@ export default function EditItem() {
       useLoaderData();
 
    const navigate = useNavigate();
+   const dispatch = useDispatch();
 
    const [date, time] = splitDateTime(deadline);
 
@@ -50,7 +53,18 @@ export default function EditItem() {
    }
 
    function handleSave() {
-      navigate("/");
+      const date = combineDateTime(eDate, eTime);
+      const obj = {
+         id: id,
+         title: eTitle,
+         description: eDescription,
+         comment: eComment,
+         deadline: date,
+      };
+      dispatch(updateItem(obj)).then(() => {
+         navigate("/");
+         dispatch(getAllTodos());
+      });
    }
 
    return (

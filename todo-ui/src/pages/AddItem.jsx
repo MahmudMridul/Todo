@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../todoSlice";
-import { getCurrentTime, getTodayDate } from "../todoUtils";
+import { combineDateTime, getCurrentTime, getTodayDate } from "../todoUtils";
 import Popup from "../components/Popup";
 import Loading from "../components/Loading";
 
@@ -39,12 +39,8 @@ export default function AddItem() {
       setTime(val);
    }
 
-   function combineDateTime() {
-      return `${deadline}T${time}:00.000Z`;
-   }
-
    function handleAdd() {
-      const date = combineDateTime();
+      const date = combineDateTime(deadline, time);
       const obj = {
          title,
          description,

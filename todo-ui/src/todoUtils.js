@@ -4,6 +4,7 @@ export const urls = {
    common: `${api}`,
    remove: `${api}?title=`,
    toggleDone: `${api}status`,
+   update: `${api}?id=`,
 };
 
 export function getTodayDate() {
@@ -31,6 +32,10 @@ export function formatDateString(dateString) {
    hours = hours.toString().padStart(2, '0'); // Pad hours with leading zero if needed
 
    return `${hours}:${minutes} ${period} ${month} ${day}, ${year}`;
+}
+
+export function combineDateTime(date, time) {
+   return `${date}T${time}:00.000Z`;
 }
 
 export function splitDateTime(dateTimeString) {
