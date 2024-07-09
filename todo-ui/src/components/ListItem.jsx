@@ -16,6 +16,7 @@ export default function ListItem({
    comm,
    deadline,
    completed,
+   expired,
 }) {
    const dispatch = useDispatch();
    const states = useSelector((store) => store.todo);
@@ -52,9 +53,16 @@ export default function ListItem({
    return (
       <div
          className={`my-5 border-2 rounded-2xl p-4 border-gray-300 ${
-            completed ? "bg-gray-300" : ""
+            completed || expired ? "bg-gray-300" : ""
          }`}
       >
+         <div
+            className={`${
+               !completed && expired ? "block" : "hidden"
+            } font-bold text-white p-1 text-center w-24 rounded-xl bg-rose-700`}
+         >
+            Overdue!
+         </div>
          <div className="text-xl font-semibold mb-2">{title}</div>
          <div className="mb-1">{desc}</div>
          <div className="text-gray-500 mb-1">{comm}</div>
