@@ -22,12 +22,21 @@ namespace TodoAPI.Controllers
         }
         // GET: api/<ItemController>
         [HttpGet(Name = "GetAllItems")]
-        public async Task<ActionResult<ApiResponse>> GetAllItems() 
+        public async Task<ActionResult<ApiResponse>> GetAllItems()
         {
             try
             {
+                await _db.Items
+                    .Where(item => item.Deadline < DateTime.Now)
+                    .ExecuteUpdateAsync(setter => setter.SetProperty(item => item.IsExpired, true));
+
+                await _db.Items
+                    .Where(item => item.Deadline >= DateTime.Now)
+                    .ExecuteUpdateAsync(setter => setter.SetProperty(item => item.IsExpired, false));
+
+                await _db.SaveChangesAsync();
                 IEnumerable<Item> items = await _db.Items.ToListAsync();
-                if(items.Count() == 0)
+                if (items.Count() == 0)
                 {
                     response.Message = "No items found";
                 }
@@ -61,8 +70,8 @@ namespace TodoAPI.Controllers
                     response.StatusCode = HttpStatusCode.NotFound;
                     return BadRequest(response);
                 }
-                
-                response.Message = "Retrieved item";    
+
+                response.Message = "Retrieved item";
                 response.Data = item;
                 response.IsSuccess = true;
                 response.StatusCode = HttpStatusCode.OK;
@@ -85,7 +94,7 @@ namespace TodoAPI.Controllers
                 string message = "";
                 IEnumerable<Item> items = await _db.Items.ToListAsync();
 
-                if(!ItemValidator.IsValidItem(item, items, out message))
+                if (!ItemValidator.IsValidItem(item, items, out message))
                 {
                     response.StatusCode = HttpStatusCode.BadRequest;
                     response.Message = message;
@@ -147,11 +156,11 @@ namespace TodoAPI.Controllers
                 _db.Items.Update(dbItem);
                 await _db.SaveChangesAsync();
 
-                response.Data = dbItem;
+                response.Data = item;
                 response.StatusCode = HttpStatusCode.OK;
                 response.Message = "Item updated";
                 response.IsSuccess = true;
-                return Ok(response);
+                return Ok(response);                
             }
             catch (Exception ex)
             {
