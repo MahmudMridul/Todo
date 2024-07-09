@@ -13,5 +13,6 @@ namespace TodoAPI.Models
         public DateTime UpdatedDate { get; set;}
         public DateTime Deadline { get; set;}
         public bool IsCompleted { get; set;}
+        public bool IsExpired { get; set;}
     }
 }
