@@ -8,13 +8,13 @@ export const urls = {
 };
 
 export const sortByOptions = [
-   { key: "default", value: "Default" },
-   { key: "nameA", value: "Name (Asc)" },
-   { key: "nameD", value: "Name (Dsc)" },
-   { key: "dueDateA", value: "Due Date (Asc)" },
-   { key: "dueDateD", value: "Due Date (Dsc)" },
-   { key: "completedA", value: "Completed Status (Asc)" },
-   { key: "completedD", value: "Completed Status (Dsc)" },
+   "Default",
+   "Name (Asc)",
+   "Name (Dsc)",
+   "Due Date (Asc)",
+   "Due Date (Dsc)",
+   "Completed Status (Asc)",
+   "Completed Status (Dsc)"
 ];
 
 export function getTodayDate() {
