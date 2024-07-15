@@ -7,6 +7,16 @@ export const urls = {
    update: `${api}?id=`,
 };
 
+export const sortByOptions = [
+   { key: "default", value: "Default" },
+   { key: "nameA", value: "Name (Asc)" },
+   { key: "nameD", value: "Name (Dsc)" },
+   { key: "dueDateA", value: "Due Date (Asc)" },
+   { key: "dueDateD", value: "Due Date (Dsc)" },
+   { key: "completedA", value: "Completed Status (Asc)" },
+   { key: "completedD", value: "Completed Status (Dsc)" },
+];
+
 export function getTodayDate() {
    return new Date().toISOString().split("T")[0];
 }
