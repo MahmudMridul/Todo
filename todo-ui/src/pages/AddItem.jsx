@@ -4,9 +4,11 @@ import { addItem } from "../todoSlice";
 import { combineDateTime, getCurrentTime, getTodayDate } from "../todoUtils";
 import Popup from "../components/Popup";
 import Loading from "../components/Loading";
+import { useNavigate } from "react-router-dom";
 
 export default function AddItem() {
    const dispatch = useDispatch();
+   const navigate = useNavigate();
 
    const [title, setTitle] = useState("");
    const [description, setDesc] = useState("");
@@ -48,7 +50,9 @@ export default function AddItem() {
          deadline: date,
       };
       console.log("handleAdd", obj);
-      dispatch(addItem(obj));
+      dispatch(addItem(obj)).then(() => {
+         navigate("/");
+      });
    }
 
    return (
