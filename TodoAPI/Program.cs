@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TodoAPI.Db;
+using TodoAPI.Repository;
+using TodoAPI.Repository.IRepository;
 
 namespace TodoAPI
 {
@@ -13,11 +15,13 @@ namespace TodoAPI
 
             // Add services to the container.
 
+            // Add repository
+            builder.Services.AddScoped<IItemRepository, ItemRepository>();
+
             // Add db context
             builder.Services.AddDbContext<TodoContext>(
                 op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
                 );
-
 
             // Add CORS
             builder.Services.AddCors(ops => 

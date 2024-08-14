@@ -4,6 +4,7 @@ using System.Net;
 using TodoAPI.Db;
 using TodoAPI.Models;
 using TodoAPI.Models.DTOs;
+using TodoAPI.Repository.IRepository;
 using TodoAPI.Utils;
 
 namespace TodoAPI.Controllers
@@ -13,46 +14,42 @@ namespace TodoAPI.Controllers
     public class ItemController : ControllerBase
     {
         private readonly TodoContext _db;
+        private readonly IItemRepository _repo;
         private ApiResponse response;
 
-        public ItemController(TodoContext db)
+        public ItemController(TodoContext db, IItemRepository repo)
         {
             _db = db;
+            _repo = repo;
             response = new ApiResponse();
         }
+
+        private void CreateResponse(HttpStatusCode statusCode, string message, object? data = null, bool isSuccess = false)
+        {
+            response.Data = data;
+            response.StatusCode = statusCode;
+            response.Message = message;
+            response.IsSuccess = isSuccess;
+        }
+
         // GET: api/<ItemController>
         [HttpGet(Name = "GetAllItems")]
         public async Task<ActionResult<ApiResponse>> GetAllItems()
         {
             try
             {
-                await _db.Items
-                    .Where(item => item.Deadline < DateTime.Now)
-                    .ExecuteUpdateAsync(setter => setter.SetProperty(item => item.IsExpired, true));
-
-                await _db.Items
-                    .Where(item => item.Deadline >= DateTime.Now)
-                    .ExecuteUpdateAsync(setter => setter.SetProperty(item => item.IsExpired, false));
-
-                await _db.SaveChangesAsync();
-                IEnumerable<Item> items = await _db.Items.ToListAsync();
-                if (items.Count() == 0)
+                IEnumerable<Item> items = await _repo.GetAllItems();
+                string message = "No items found";
+                if (items.Any())
                 {
-                    response.Message = "No items found";
+                    message = "Retrieved items";
                 }
-                else
-                {
-                    response.Message = "Retrieved items";
-                }
-                response.Data = items;
-                response.IsSuccess = true;
-                response.StatusCode = HttpStatusCode.OK;
+                CreateResponse(HttpStatusCode.OK, message, items, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }
