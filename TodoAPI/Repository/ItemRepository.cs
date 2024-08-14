@@ -24,9 +24,11 @@ namespace TodoAPI.Repository
             return await _db.Items.FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        public Task<Item> CreateItem(Item item)
+        public async Task<Item> CreateItem(Item item)
         {
-            throw new NotImplementedException();
+            await _db.Items.AddAsync(item);
+            await _db.SaveChangesAsync();
+            return item;
         }
 
         public Task<Item> DeleteItem(string title)

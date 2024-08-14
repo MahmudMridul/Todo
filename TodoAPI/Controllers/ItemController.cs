@@ -83,12 +83,11 @@ namespace TodoAPI.Controllers
             try
             {
                 string message = "";
-                IEnumerable<Item> items = await _db.Items.ToListAsync();
+                IEnumerable<Item> items = await _repo.GetAllItems();
 
                 if (!ItemValidator.IsValidItem(item, items, out message))
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Message = message;
+                    CreateResponse(HttpStatusCode.BadRequest, message);
                     return BadRequest(response);
                 }
 
@@ -102,19 +101,13 @@ namespace TodoAPI.Controllers
                     Deadline = item.Deadline,
                     IsCompleted = false,
                 };
-                await _db.Items.AddAsync(newItem);
-                await _db.SaveChangesAsync();
-
-                response.Data = newItem;
-                response.StatusCode = HttpStatusCode.OK;
-                response.Message = "Item added";
-                response.IsSuccess = true;
+                await _repo.CreateItem(newItem);
+                CreateResponse(HttpStatusCode.OK, "Item added", newItem, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }
