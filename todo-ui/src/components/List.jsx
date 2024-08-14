@@ -14,15 +14,8 @@ export default function List() {
    return (
       <div>
          {todos.map((item, index) => {
-            const {
-               id,
-               title,
-               description,
-               comment,
-               deadline,
-               isCompleted,
-               isExpired,
-            } = item;
+            const { id, title, description, comment, deadline, isCompleted } =
+               item;
             return (
                <ListItem
                   key={index}
@@ -32,7 +25,7 @@ export default function List() {
                   comm={comment}
                   deadline={deadline}
                   completed={isCompleted}
-                  expired={isExpired}
+                  expired={new Date() > new Date(deadline)}
                />
             );
          })}
