@@ -13,13 +13,11 @@ namespace TodoAPI.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly TodoContext _db;
         private readonly IItemRepository _repo;
         private ApiResponse response;
 
-        public ItemController(TodoContext db, IItemRepository repo)
+        public ItemController(IItemRepository repo)
         {
-            _db = db;
             _repo = repo;
             response = new ApiResponse();
         }
@@ -119,7 +117,7 @@ namespace TodoAPI.Controllers
             try
             {
                 string message = "";
-                IEnumerable<Item> items = await _db.Items.ToListAsync();
+                IEnumerable<Item> items = await _repo.GetAllItems();
 
                 if (!ItemValidator.IsValidItem(id, item, items, out message))
                 {
