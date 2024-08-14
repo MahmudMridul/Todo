@@ -153,27 +153,20 @@ namespace TodoAPI.Controllers
         {
             try
             {
-                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Title == title);
+                Item? item = await _repo.GetItemByTitle(title);
 
                 if (item == null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Message = "No such item found";
+                    CreateResponse(HttpStatusCode.NotFound, "No such item found");
                     return BadRequest(response);
                 }
-                _db.Remove(item);
-                await _db.SaveChangesAsync();
-
-                response.Data = item;
-                response.StatusCode = HttpStatusCode.OK;
-                response.IsSuccess = true;
-                response.Message = "Item deleted";
+                await _repo.DeleteItem(item);
+                CreateResponse(HttpStatusCode.OK, "Item deleted", item, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }
@@ -183,30 +176,23 @@ namespace TodoAPI.Controllers
         {
             try
             {
-                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Id == dto.Id);
+                Item? item = await _repo.GetItemById(dto.Id);
                 if (item == null)
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Message = "No such item found";
+                    CreateResponse(HttpStatusCode.BadRequest, "No such item found");
                     return BadRequest(response);
                 }
 
                 item.IsCompleted = dto.Status;
                 item.UpdatedDate = DateTime.Now;
 
-                _db.Items.Update(item);
-                await _db.SaveChangesAsync();
-
-                response.Data = item;
-                response.StatusCode = HttpStatusCode.OK;
-                response.Message = "Item's completion status updated";
-                response.IsSuccess = true;
+                await _repo.UpdateItem(item);
+                CreateResponse(HttpStatusCode.OK, "Item's completion status updated", item, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }

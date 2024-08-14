@@ -39,9 +39,16 @@ namespace TodoAPI.Repository
             return item;
         }
 
-        public Task<Item> DeleteItem(string title)
+        public async Task<Item?> GetItemByTitle(string title)
         {
-            throw new NotImplementedException();
+            return await _db.Items.FirstOrDefaultAsync(obj => obj.Title == title);
+        }
+
+        public async Task<Item> DeleteItem(Item item)
+        {
+            _db.Items.Remove(item);
+            await _db.SaveChangesAsync();
+            return item;
         }
 
         

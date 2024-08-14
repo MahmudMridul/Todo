@@ -8,7 +8,8 @@ namespace TodoAPI.Repository.IRepository
         Task<Item?> GetItemById(int id);
         Task<Item> CreateItem(Item item);
         Task<Item> UpdateItem(Item item);
-        Task<Item> DeleteItem(string title);
+        Task<Item?> GetItemByTitle(string title);
+        Task<Item> DeleteItem(Item item);
 
     }
 }
