@@ -60,24 +60,18 @@ namespace TodoAPI.Controllers
         {
             try
             {
-                Item? item = await _db.Items.FirstOrDefaultAsync(obj => obj.Id == id);
+                Item? item = await _repo.GetItemById(id);
                 if (item == null)
                 {
-                    response.Message = "No items found";
-                    response.StatusCode = HttpStatusCode.NotFound;
+                    CreateResponse(HttpStatusCode.NotFound, "No items found");
                     return BadRequest(response);
                 }
-
-                response.Message = "Retrieved item";
-                response.Data = item;
-                response.IsSuccess = true;
-                response.StatusCode = HttpStatusCode.OK;
+                CreateResponse(HttpStatusCode.OK, "Retrieved item", item, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }

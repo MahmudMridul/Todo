@@ -19,6 +19,11 @@ namespace TodoAPI.Repository
             return await _db.Items.AsNoTracking().ToListAsync();
         }
 
+        public async Task<Item?> GetItemById(int id)
+        {
+            return await _db.Items.FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
         public Task<Item> CreateItem(Item item)
         {
             throw new NotImplementedException();
@@ -31,10 +36,7 @@ namespace TodoAPI.Repository
 
         
 
-        public Task<Item> GetItemById(int id)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public Task<Item> UpdateItem(Item item)
         {
