@@ -123,12 +123,11 @@ namespace TodoAPI.Controllers
 
                 if (!ItemValidator.IsValidItem(id, item, items, out message))
                 {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                    response.Message = message;
+                    CreateResponse(HttpStatusCode.BadRequest, message);
                     return BadRequest(response);
                 }
 
-                Item? dbItem = await _db.Items.FindAsync(id);
+                Item? dbItem = await _repo.GetItemById(id);
 
                 dbItem.Title = item.Title;
                 dbItem.Description = item.Description;
@@ -137,19 +136,13 @@ namespace TodoAPI.Controllers
                 dbItem.IsCompleted = item.IsCompleted;
                 dbItem.UpdatedDate = DateTime.Now;
 
-                _db.Items.Update(dbItem);
-                await _db.SaveChangesAsync();
-
-                response.Data = item;
-                response.StatusCode = HttpStatusCode.OK;
-                response.Message = "Item updated";
-                response.IsSuccess = true;
+                await _repo.UpdateItem(dbItem);
+                CreateResponse(HttpStatusCode.OK, "Item updated", item, true);
                 return Ok(response);                
             }
             catch (Exception ex)
             {
-                response.StatusCode = HttpStatusCode.InternalServerError;
-                response.Message = ex.Message;
+                CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
                 return BadRequest(response);
             }
         }

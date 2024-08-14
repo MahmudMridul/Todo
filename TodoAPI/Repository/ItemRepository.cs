@@ -31,6 +31,14 @@ namespace TodoAPI.Repository
             return item;
         }
 
+
+        public async Task<Item> UpdateItem(Item item)
+        {
+            _db.Items.Update(item);
+            await _db.SaveChangesAsync();
+            return item;
+        }
+
         public Task<Item> DeleteItem(string title)
         {
             throw new NotImplementedException();
@@ -40,10 +48,6 @@ namespace TodoAPI.Repository
 
 
 
-        public Task<Item> UpdateItem(Item item)
-        {
-            throw new NotImplementedException();
-        }
 
         
     }
