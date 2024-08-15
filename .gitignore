@@ -1,6 +1,7 @@
 #ui
 todo-ui/node_modules/*
 todo-ui/build/*
+todo-ui/.vscode/*
 
 #api
 TodoAPI/.vs/*
