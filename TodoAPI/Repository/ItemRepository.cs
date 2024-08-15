@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoAPI.Db;
+using TodoAPI.Db.IDb;
 using TodoAPI.Models;
 using TodoAPI.Repository.IRepository;
 
@@ -7,9 +7,9 @@ namespace TodoAPI.Repository
 {
     public class ItemRepository : IItemRepository
     {
-        private readonly TodoContext _db;
+        private readonly IDbContext _db;
 
-        public ItemRepository(TodoContext db)
+        public ItemRepository(IDbContext db)
         {
             _db = db;
         }
