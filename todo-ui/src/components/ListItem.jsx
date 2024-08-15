@@ -52,7 +52,7 @@ export default function ListItem({
 
    return (
       <div
-         className={`my-5 border-2 rounded-2xl p-4 border-gray-300 ${
+         className={`my-8 rounded-2xl p-4 border-gray-300 shadow-lg hover:shadow-2xl hover:scale-101 ${
             completed || expired ? "bg-gray-300" : ""
          }`}
       >
