@@ -73,7 +73,7 @@ export default function TopOptions() {
             </div>
 
             <button
-               className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold"
+               className="w-16 p-1 ml-3 bg-white hover:bg-gray-100 rounded-md text-gray-800 font-semibold outline outline-offset-0 outline-gray-800 "
                onClick={gotoAddPage}
             >
                Add
