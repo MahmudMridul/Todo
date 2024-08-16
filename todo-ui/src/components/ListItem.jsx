@@ -71,26 +71,25 @@ export default function ListItem({
             {formatDateString(deadline)}
          </div>
          <hr className="mb-4"></hr>
-         <button
-            className={`w-36 p-1 ${
-               completed ? "bg-amber-600" : "bg-green-700"
-            }  rounded-md text-white font-semibold`}
-            onClick={toggleCompleted}
-         >
-            {completed ? "Mark as Pending" : "Mark as Done"}
-         </button>
-         <button
-            className="w-16 p-1 ml-3 bg-gray-800 rounded-md text-white font-semibold"
-            onClick={gotoEditPage}
-         >
-            Edit
-         </button>
-         <button
-            className="w-16 p-1 ml-3 bg-rose-800 rounded-md text-white font-semibold"
-            onClick={deleteItem}
-         >
-            Delete
-         </button>
+         <div className="flex align-middle">
+            {/* mark as completed button */}
+            <button className={`w-12`} onClick={toggleCompleted}>
+               <img src="/images/done.png" alt="done" width="30" height="30" />
+            </button>
+            {/* edit button */}
+            <button className="w-12 ml-3" onClick={gotoEditPage}>
+               <img src="/images/edit.png" alt="edit" width="25" height="25" />
+            </button>
+            {/* delete button */}
+            <button className="w-12 ml-3" onClick={deleteItem}>
+               <img
+                  src="/images/delete.png"
+                  alt="delete"
+                  width="25"
+                  height="25"
+               />
+            </button>
+         </div>
       </div>
    );
 }
