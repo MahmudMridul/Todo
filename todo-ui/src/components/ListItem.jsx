@@ -1,5 +1,5 @@
 import React from "react";
-import { formatDateString } from "../todoUtils";
+import { formatDateString, truncateString } from "../todoUtils";
 import { useDispatch, useSelector } from "react-redux";
 import {
    getAllTodos,
@@ -52,7 +52,7 @@ export default function ListItem({
 
    return (
       <div
-         className={`my-8 rounded-2xl p-4 border-gray-300 shadow-lg hover:shadow-2xl hover:scale-101 ${
+         className={`h-48 my-8 rounded-2xl p-4 border-gray-300 shadow-lg hover:shadow-2xl hover:scale-101 ${
             completed || expired ? "bg-gray-300" : ""
          }`}
       >
@@ -64,14 +64,14 @@ export default function ListItem({
             Overdue!
          </div>
          <div className="text-xl font-semibold mb-2">{title}</div>
-         <div className="mb-1">{desc}</div>
-         <div className="text-gray-500 mb-1">{comm}</div>
+         <div className="mb-1">{truncateString(desc, 45)}</div>
+         <div className="text-gray-500 mb-1">{truncateString(comm, 45)}</div>
          <div className="mb-1">
             <span className="text-rose-800 font-semibold">Due:</span>{" "}
             {formatDateString(deadline)}
          </div>
          <hr className="mb-4"></hr>
-         <div className="flex align-middle">
+         <div className="flex align-middle mb-1">
             {/* mark as completed button */}
             <button className={`w-12`} onClick={toggleCompleted}>
                <img src="/images/done.png" alt="done" width="30" height="30" />
