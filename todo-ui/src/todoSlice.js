@@ -4,9 +4,9 @@ import { urls } from "./todoUtils";
 const initialState = {
    todos: [],
 
-   popupMsg: "",
+   popupMsg: "Test popup design",
    popupOpen: false,
-   popupStatus: "default", // default, success, warning, info, error
+   popupStatus: "error", // default, success, warning, info, error
 
    isLoading: false,
 };
@@ -20,13 +20,12 @@ export const getAllTodos = createAsyncThunk(
             method: "GET",
             headers: {
                "Content-Type": "application/json",
-               Accept: "application/json"
-            }
+               Accept: "application/json",
+            },
          });
          const data = await response.json();
          return data;
-      }
-      catch (error) {
+      } catch (error) {
          console.error("Error from getAllTodos: ", error);
       }
    }
@@ -42,13 +41,12 @@ export const removeItem = createAsyncThunk(
             method: "DELETE",
             headers: {
                "Content-Type": "application/json",
-               Accept: "application/json"
-            }
+               Accept: "application/json",
+            },
          });
          const data = await response.json();
          return data;
-      }
-      catch (error) {
+      } catch (error) {
          console.error("Error from removeItem: ", error);
       }
    }
@@ -63,14 +61,13 @@ export const toggleIsCompleted = createAsyncThunk(
             method: "POST",
             headers: {
                "Content-Type": "application/json",
-               Accept: "application/json"
+               Accept: "application/json",
             },
             body: JSON.stringify(obj),
          });
          const data = await response.json();
          return data;
-      }
-      catch (error) {
+      } catch (error) {
          console.error("Error from toggleIsCompleted: ", error);
       }
    }
@@ -85,14 +82,13 @@ export const addItem = createAsyncThunk(
             method: "POST",
             headers: {
                "Content-Type": "application/json",
-               Accept: "application/json"
+               Accept: "application/json",
             },
             body: JSON.stringify(obj),
          });
          const data = await response.json();
          return data;
-      }
-      catch (error) {
+      } catch (error) {
          console.error("Error from addItem: ", error);
       }
    }
@@ -113,8 +109,7 @@ export const updateItem = createAsyncThunk(
          });
          const data = await response.json();
          return data;
-      }
-      catch (error) {
+      } catch (error) {
          console.error("Error from updateItem: ", error);
       }
    }
@@ -127,14 +122,14 @@ export const todoSlice = createSlice({
       setState: {
          prepare(name, value) {
             return {
-               payload: { name, value }
+               payload: { name, value },
             };
          },
          reducer(state, action) {
             const { name, value } = action.payload;
             state[name] = value;
-         }
-      }
+         },
+      },
    },
    extraReducers: (builder) => {
       builder
@@ -150,8 +145,7 @@ export const todoSlice = createSlice({
                   state.popupMsg = message;
                   state.popupOpen = true;
                }
-            }
-            else {
+            } else {
                console.error("Error");
             }
             state.isLoading = false;
@@ -160,25 +154,13 @@ export const todoSlice = createSlice({
             state.isLoading = false;
          })
 
-         .addCase(removeItem.pending, (state, action) => {
+         .addCase(removeItem.pending, (state, action) => {})
+         .addCase(removeItem.fulfilled, (state, action) => {})
+         .addCase(removeItem.rejected, (state, action) => {})
 
-         })
-         .addCase(removeItem.fulfilled, (state, action) => {
-
-         })
-         .addCase(removeItem.rejected, (state, action) => {
-
-         })
-
-         .addCase(toggleIsCompleted.pending, (state, action) => {
-
-         })
-         .addCase(toggleIsCompleted.fulfilled, (state, action) => {
-
-         })
-         .addCase(toggleIsCompleted.rejected, (state, action) => {
-
-         })
+         .addCase(toggleIsCompleted.pending, (state, action) => {})
+         .addCase(toggleIsCompleted.fulfilled, (state, action) => {})
+         .addCase(toggleIsCompleted.rejected, (state, action) => {})
 
          .addCase(addItem.pending, (state, action) => {
             state.isLoading = true;
@@ -189,8 +171,7 @@ export const todoSlice = createSlice({
                state.popupStatus = isSuccess === true ? "success" : "error";
                state.popupMsg = message;
                state.popupOpen = true;
-            }
-            else {
+            } else {
                console.error("Error");
             }
             state.isLoading = false;
@@ -208,16 +189,15 @@ export const todoSlice = createSlice({
                state.popupStatus = isSuccess === true ? "success" : "error";
                state.popupMsg = message;
                state.popupOpen = true;
-            }
-            else {
+            } else {
                console.error("Error");
             }
             state.isLoading = false;
          })
          .addCase(updateItem.rejected, (state, action) => {
             state.isLoading = false;
-         })
-   }
+         });
+   },
 });
 
 export const { setState } = todoSlice.actions;

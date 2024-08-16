@@ -17,13 +17,13 @@ export default function Popup() {
 
    let popBgColor = "bg-gray-100";
    if (popupStatus === "success") {
-      popBgColor = "bg-lime-700";
+      popBgColor = "bg-gradient-to-r from-lime-500 to-green-700";
    } else if (popupStatus === "warning") {
-      popBgColor = "bg-amber-600";
+      popBgColor = "bg-gradient-to-r from-yellow-300 to-amber-500";
    } else if (popupStatus === "info") {
-      popBgColor = "bg-sky-500";
+      popBgColor = "bg-gradient-to-r from-cyan-500 to-blue-500";
    } else if (popupStatus === "error") {
-      popBgColor = "bg-rose-800";
+      popBgColor = "bg-gradient-to-r from-rose-400 to-red-800";
    }
 
    return (
@@ -33,7 +33,7 @@ export default function Popup() {
          } justify-end`}
       >
          <div
-            className={`w-max h-max px-4 py-1 rounded-xl ${popBgColor} text-white font-medium`}
+            className={`w-max h-max px-4 py-2 rounded-md ${popBgColor} text-white font-medium`}
          >
             {popupMsg}
          </div>

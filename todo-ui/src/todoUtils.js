@@ -54,9 +54,9 @@ export function splitDateTime(dateTimeString) {
 }
 
 export function truncateString(str, n) {
+   if (!str || str === "") return ". . .";
    if (str.length > n) {
       return str.substring(0, n) + "...";
-   } else {
-      return str;
    }
+   return str;
 }
