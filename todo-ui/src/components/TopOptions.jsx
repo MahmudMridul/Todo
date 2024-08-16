@@ -73,10 +73,22 @@ export default function TopOptions() {
             </div>
 
             <button
-               className="w-16 p-1 ml-3 bg-white hover:bg-gray-100 rounded-md text-gray-800 font-semibold outline outline-offset-0 outline-gray-800 "
+               className={`w-12 p-1 ml-1 rounded-md 
+                  text-gray-800 font-semibold 
+                  shadow-gray-400
+                  `}
                onClick={gotoAddPage}
             >
-               Add
+               <div className="flex justify-center">
+                  <span>
+                     <img
+                        src="/images/add.png"
+                        alt="add icon"
+                        height="25"
+                        width="25"
+                     />
+                  </span>
+               </div>
             </button>
          </div>
          <hr className="my-4"></hr>
