@@ -1,3 +1,0 @@
-- Better UI
-- Add logging
-- Make responsive for tab and mobile devices. 

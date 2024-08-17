@@ -14,7 +14,6 @@ namespace TodoAPI.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Item>().HasData(
                 new Item() 
                 { 
@@ -62,6 +61,7 @@ namespace TodoAPI.Db
                     IsCompleted = false,
                 }
             );
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
