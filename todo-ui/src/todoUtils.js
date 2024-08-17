@@ -27,24 +27,43 @@ export function getCurrentTime() {
    const minutes = String(now.getMinutes() + 5).padStart(2, "0");
    return `${hours}:${minutes}`;
 }
+
 export function formatDateString(dateString) {
-   const date = new Date(dateString);
+   const [date, time] = dateString.split("T");
+   const [year, month, day] = date.split("-");
+   const [hour, min, sec] = time.split(":");
+   const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+   ];
 
-   let hours = date.getHours();
-   const minutes = date.getMinutes().toString().padStart(2, "0");
-   const day = date.getDate();
-   const month = date.toLocaleString("default", { month: "long" });
-   const year = date.getFullYear();
+   console.log(`${hour}:${min} ${day} ${months[Number(month) - 1]}, ${year}`);
+   return `${convertTo12HourFormat(`${hour}:${min}`)} ${day} ${
+      months[Number(month) - 1]
+   }, ${year}`;
+}
 
-   const period = hours >= 12 ? "PM" : "AM";
-
-   hours = hours % 12 || 12; // Converts '0' hours to '12'
-   hours = hours.toString().padStart(2, "0"); // Pad hours with leading zero if needed
-
-   return `${hours}:${minutes} ${period} ${month} ${day}, ${year}`;
+function convertTo12HourFormat(timeString) {
+   let [hours, minutes] = timeString.split(":").map(Number);
+   let period = hours >= 12 ? "PM" : "AM";
+   hours = hours % 12 || 12;
+   let formattedHours = hours.toString().padStart(2, "0");
+   let formattedMinutes = minutes.toString().padStart(2, "0");
+   return `${formattedHours}:${formattedMinutes} ${period}`;
 }
 
 export function combineDateTime(date, time) {
+   console.log(`${date}T${time}:00.000Z`);
    return `${date}T${time}:00.000Z`;
 }
 
