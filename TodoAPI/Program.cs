@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TodoAPI.Db;
 using TodoAPI.Db.IDb;
 using TodoAPI.Repository;
@@ -36,6 +37,11 @@ namespace TodoAPI
                 );
                 builder.Services.AddScoped<IDbContext, TodoContext>();
             }
+
+            //Add serilog
+            builder.Host.UseSerilog((context, configuration) => 
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
             
             // Add CORS
             builder.Services.AddCors(ops => 
@@ -66,6 +72,9 @@ namespace TodoAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            //Serilog configs
+            app.UseStaticFiles();
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
