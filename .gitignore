@@ -7,3 +7,4 @@ todo-ui/.vscode/*
 TodoAPI/.vs/*
 TodoAPI/bin/*
 TodoAPI/obj/*
+TodoAPI/Logs/*
