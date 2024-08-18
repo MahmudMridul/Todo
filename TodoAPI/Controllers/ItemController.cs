@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
-using TodoAPI.Db;
 using TodoAPI.Models;
 using TodoAPI.Models.DTOs;
 using TodoAPI.Repository.IRepository;
@@ -14,12 +12,14 @@ namespace TodoAPI.Controllers
     public class ItemController : ControllerBase
     {
         private readonly IItemRepository _repo;
+        private readonly ILogger<ItemController> _logger;
         private ApiResponse response;
 
-        public ItemController(IItemRepository repo)
+        public ItemController(IItemRepository repo, ILogger<ItemController> logger)
         {
             _repo = repo;
             response = new ApiResponse();
+            _logger = logger;
         }
 
         private void CreateResponse(HttpStatusCode statusCode, string message, object? data = null, bool isSuccess = false)
@@ -36,18 +36,21 @@ namespace TodoAPI.Controllers
         {
             try
             {
+                _logger.LogInformation("Calling GetAllItems");
                 IEnumerable<Item> items = await _repo.GetAllItems();
                 string message = "No items found";
                 if (items.Any())
                 {
                     message = "Retrieved items";
                 }
+                _logger.LogInformation(message);
                 CreateResponse(HttpStatusCode.OK, message, items, true);
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
@@ -58,18 +61,22 @@ namespace TodoAPI.Controllers
         {
             try
             {
+                _logger.LogInformation($"Calling GetItemById with ID: {id}");
                 Item? item = await _repo.GetItemById(id);
                 if (item == null)
                 {
                     CreateResponse(HttpStatusCode.NotFound, "No items found");
+                    _logger.LogInformation($"No items found for ID: {id}");
                     return BadRequest(response);
                 }
                 CreateResponse(HttpStatusCode.OK, "Retrieved item", item, true);
+                _logger.LogInformation($"Retievend item for ID: {id}");
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
@@ -81,10 +88,12 @@ namespace TodoAPI.Controllers
             try
             {
                 string message = "";
+                _logger.LogInformation($"Calling GetAllItems inside Create api");
                 IEnumerable<Item> items = await _repo.GetAllItems();
 
                 if (!ItemValidator.IsValidItem(item, items, out message))
                 {
+                    _logger.LogInformation($"Items is not valid: {message}");
                     CreateResponse(HttpStatusCode.BadRequest, message);
                     return BadRequest(response);
                 }
@@ -101,11 +110,13 @@ namespace TodoAPI.Controllers
                 };
                 await _repo.CreateItem(newItem);
                 CreateResponse(HttpStatusCode.OK, "Item added", newItem, true);
+                _logger.LogInformation($"Item added");
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
@@ -117,14 +128,17 @@ namespace TodoAPI.Controllers
             try
             {
                 string message = "";
+                _logger.LogInformation($"Calling GetAllItems inside Update api");
                 IEnumerable<Item> items = await _repo.GetAllItems();
 
                 if (!ItemValidator.IsValidItem(id, item, items, out message))
                 {
                     CreateResponse(HttpStatusCode.BadRequest, message);
+                    _logger.LogInformation($"Item is not valid. Item ID: {id}");
                     return BadRequest(response);
                 }
 
+                _logger.LogInformation($"Calling GetItemById with ID: {id}");
                 Item? dbItem = await _repo.GetItemById(id);
 
                 dbItem.Title = item.Title;
@@ -136,11 +150,13 @@ namespace TodoAPI.Controllers
 
                 await _repo.UpdateItem(dbItem);
                 CreateResponse(HttpStatusCode.OK, "Item updated", item, true);
+                _logger.LogInformation($"Item updated. Item ID: {id}");
                 return Ok(response);                
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
@@ -151,20 +167,24 @@ namespace TodoAPI.Controllers
         {
             try
             {
+                _logger.LogInformation($"Calling GetItemByTitle. Title: {title}");
                 Item? item = await _repo.GetItemByTitle(title);
 
                 if (item == null)
                 {
                     CreateResponse(HttpStatusCode.NotFound, "No such item found");
+                    _logger.LogInformation($"No item found with title {title}");
                     return BadRequest(response);
                 }
                 await _repo.DeleteItem(item);
                 CreateResponse(HttpStatusCode.OK, "Item deleted", item, true);
+                _logger.LogInformation($"Item deleted. Item Title: {title}");
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
@@ -174,10 +194,12 @@ namespace TodoAPI.Controllers
         {
             try
             {
+                _logger.LogInformation($"Calling GetItemById ID: {dto.Id}");
                 Item? item = await _repo.GetItemById(dto.Id);
                 if (item == null)
                 {
                     CreateResponse(HttpStatusCode.BadRequest, "No such item found");
+                    _logger.LogInformation($"No item found with ID: {dto.Id}");
                     return BadRequest(response);
                 }
 
@@ -186,11 +208,13 @@ namespace TodoAPI.Controllers
 
                 await _repo.UpdateItem(item);
                 CreateResponse(HttpStatusCode.OK, "Item's completion status updated", item, true);
+                _logger.LogInformation($"Updated item completion status. Item ID: {dto.Id}");
                 return Ok(response);
             }
             catch (Exception ex)
             {
                 CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                _logger.LogError(ex.Message);
                 return BadRequest(response);
             }
         }
