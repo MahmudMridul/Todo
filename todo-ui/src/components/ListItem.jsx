@@ -63,9 +63,13 @@ export default function ListItem({
          >
             Overdue!
          </div>
+         {/* Title */}
          <div className="text-xl font-semibold mb-2">{title}</div>
+         {/* Description */}
          <div className="mb-1">{truncateString(desc, 45)}</div>
+         {/* Comment */}
          <div className="text-gray-500 mb-1">{truncateString(comm, 45)}</div>
+         {/* Due date */}
          <div className="mb-1">
             <span className="text-rose-800 font-semibold">Due:</span>{" "}
             {formatDateString(deadline)}
@@ -74,7 +78,15 @@ export default function ListItem({
          <div className="flex align-middle mb-1">
             {/* mark as completed button */}
             <button className={`w-12`} onClick={toggleCompleted}>
-               <img src="/images/done.png" alt="done" width="30" height="30" />
+               <img
+                  src={`${
+                     completed ? "/images/done.png" : "/images/checkbox.png"
+                  }`}
+                  alt="done/reject"
+                  width="25"
+                  height="25"
+                  className="mt-1"
+               />
             </button>
             {/* edit button */}
             <button className="w-12 ml-3" onClick={gotoEditPage}>
