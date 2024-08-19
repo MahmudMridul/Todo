@@ -58,7 +58,12 @@ export default function TopOptions() {
    return (
       <>
          <hr className="mb-4"></hr>
-         <div className="w-full flex justify-end">
+         <div className="w-full grid gap-5 lap:grid-cols-3 mob:grid-cols-2">
+            <input
+               className="lap:w-80 mob:col-span-2 h-8 border-2 border-gray-800 rounded-lg text-xl p-1"
+               placeholder="search"
+            />
+
             <div>
                <label className="font-semibold mx-2">Sort by</label>
                <select
@@ -73,22 +78,19 @@ export default function TopOptions() {
             </div>
 
             <button
-               className={`w-12 p-1 ml-1 rounded-md 
+               className={`w-12 p-1 ml-2 rounded-md 
                   text-gray-800 font-semibold 
                   shadow-gray-400
+                  justify-self-end
                   `}
                onClick={gotoAddPage}
             >
-               <div className="flex justify-center">
-                  <span>
-                     <img
-                        src="/images/add.png"
-                        alt="add icon"
-                        height="25"
-                        width="25"
-                     />
-                  </span>
-               </div>
+               <img
+                  src="/images/add.png"
+                  alt="add icon"
+                  height="25"
+                  width="25"
+               />
             </button>
          </div>
          <hr className="my-4"></hr>

@@ -11,10 +11,10 @@ export const sortByOptions = [
    "Default",
    "Name (Asc)",
    "Name (Dsc)",
-   "Due Date (Asc)",
-   "Due Date (Dsc)",
-   "Completed Status (Asc)",
-   "Completed Status (Dsc)",
+   "Due (Asc)",
+   "Due (Dsc)",
+   "Done (Asc)",
+   "Done (Dsc)",
 ];
 
 export function getTodayDate() {
