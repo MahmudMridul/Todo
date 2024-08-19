@@ -73,7 +73,6 @@ namespace TodoAPI
                 app.UseSwaggerUI();
             }
             //Serilog configs
-            app.UseStaticFiles();
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
