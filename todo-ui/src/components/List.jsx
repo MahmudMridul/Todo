@@ -12,7 +12,7 @@ export default function List() {
    }, []);
 
    return (
-      <div className="grid grid-cols-3 gap-x-5 gap-y-1">
+      <div className="grid lap:grid-cols-3 tabL:grid-cols-2 gap-x-5 gap-y-1">
          {todos.map((item, index) => {
             const { id, title, description, comment, deadline, isCompleted } =
                item;
