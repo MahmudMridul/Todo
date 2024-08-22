@@ -9,4 +9,5 @@ Todo is basically a CRUD application built with `.NET` for the APIs, `React` for
 -  Deleting item.
 -  Mark item as completed.
 -  Mark completed item as incomplete.
--  Sort item by name, due date, completion status.
+-  Sort item by title, due date, completion status.
+-  Search item by title, description and comment.
