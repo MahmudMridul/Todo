@@ -9,8 +9,8 @@ export const urls = {
 
 export const sortByOptions = [
    "Default",
-   "Name (Asc)",
-   "Name (Dsc)",
+   "Title (Asc)",
+   "Title (Dsc)",
    "Due (Asc)",
    "Due (Dsc)",
    "Done (Asc)",
