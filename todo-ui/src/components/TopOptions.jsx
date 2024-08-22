@@ -60,7 +60,7 @@ export default function TopOptions() {
          <hr className="mb-4"></hr>
          <div className="w-full grid gap-5 lap:grid-cols-3 mob:grid-cols-2">
             <input
-               className="lap:w-80 mob:col-span-2 h-8 border-2 border-gray-800 rounded-lg text-xl p-1"
+               className="lap:w-80 lap:col-span-1 mob:col-span-2 h-8 border-2 border-gray-800 rounded-lg text-xl p-1"
                placeholder="search"
             />
 
@@ -82,6 +82,7 @@ export default function TopOptions() {
                   text-gray-800 font-semibold 
                   shadow-gray-400
                   justify-self-end
+                  mobM:justify-self-start
                   `}
                onClick={gotoAddPage}
             >
