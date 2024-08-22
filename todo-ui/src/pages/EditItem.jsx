@@ -13,8 +13,7 @@ export function loader({ params }) {
 }
 
 export default function EditItem() {
-   const { id, title, description, comment, deadline, isCompleted } =
-      useLoaderData();
+   const { id, title, description, comment, deadline } = useLoaderData();
 
    const navigate = useNavigate();
    const dispatch = useDispatch();
