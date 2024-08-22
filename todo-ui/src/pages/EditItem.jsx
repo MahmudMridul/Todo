@@ -76,7 +76,7 @@ export default function EditItem() {
                value={eTitle}
                onChange={handleTitle}
                required
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Description</label>
@@ -84,7 +84,7 @@ export default function EditItem() {
                type="text"
                value={eDescription}
                onChange={handleDesc}
-               className="col-span-4 border-2 w-80 h-20 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Comment</label>
@@ -92,7 +92,7 @@ export default function EditItem() {
                type="text"
                value={eComment}
                onChange={handleComment}
-               className="col-span-4 border-2 w-80 h-20 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Due Date *</label>
@@ -101,7 +101,7 @@ export default function EditItem() {
                value={eDate}
                onChange={handleDate}
                required
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Due Time *</label>
@@ -110,7 +110,7 @@ export default function EditItem() {
                value={eTime}
                onChange={handleTime}
                required
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <button

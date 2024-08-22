@@ -66,7 +66,7 @@ export default function AddItem() {
                value={title}
                onChange={handleTitle}
                required
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Description</label>
@@ -74,7 +74,7 @@ export default function AddItem() {
                type="text"
                value={description}
                onChange={handleDesc}
-               className="col-span-4 border-2 w-80 h-20 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Comment</label>
@@ -82,7 +82,7 @@ export default function AddItem() {
                type="text"
                value={comment}
                onChange={handleComm}
-               className="col-span-4 border-2 w-80 h-20 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Due Date *</label>
@@ -91,7 +91,7 @@ export default function AddItem() {
                value={deadline}
                onChange={handleDeadline}
                required
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <label className="col-span-2 text-xl">Due Time</label>
@@ -99,7 +99,7 @@ export default function AddItem() {
                type="time"
                value={time}
                onChange={handleTime}
-               className="col-span-4 border-2 w-80 h-8 rounded-md text-xl"
+               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
             />
 
             <button
