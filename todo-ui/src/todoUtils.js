@@ -23,8 +23,15 @@ export function getTodayDate() {
 
 export function getCurrentTime() {
    const now = new Date();
-   const hours = String(now.getHours()).padStart(2, "0");
-   const minutes = String(now.getMinutes() + 5).padStart(2, "0");
+   let hours = now.getHours();
+   let minutes = now.getMinutes();
+   if (minutes >= 55) {
+      ++hours;
+      minutes = 5;
+   }
+   hours = String(now.getHours()).padStart(2, "0");
+   minutes = String(now.getMinutes() + 5).padStart(2, "0");
+   console.log(`getCurrentTime ${hours}:${minutes}`);
    return `${hours}:${minutes}`;
 }
 
@@ -47,10 +54,9 @@ export function formatDateString(dateString) {
       "Dec",
    ];
 
-   console.log(`${hour}:${min} ${day} ${months[Number(month) - 1]}, ${year}`);
-   return `${convertTo12HourFormat(`${hour}:${min}`)} ${day} ${
-      months[Number(month) - 1]
-   }, ${year}`;
+   console.log(`${hour}:${min} ${day} ${months[Number(month) - 1]}, ${year} `);
+   return `${convertTo12HourFormat(`${hour}:${min}`)} ${day} ${months[Number(month) - 1]
+      }, ${year} `;
 }
 
 function convertTo12HourFormat(timeString) {
@@ -59,7 +65,7 @@ function convertTo12HourFormat(timeString) {
    hours = hours % 12 || 12;
    let formattedHours = hours.toString().padStart(2, "0");
    let formattedMinutes = minutes.toString().padStart(2, "0");
-   return `${formattedHours}:${formattedMinutes} ${period}`;
+   return `${formattedHours}:${formattedMinutes} ${period} `;
 }
 
 export function combineDateTime(date, time) {
