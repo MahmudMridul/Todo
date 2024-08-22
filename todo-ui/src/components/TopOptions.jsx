@@ -10,7 +10,12 @@ export default function TopOptions() {
    const [sortby, setSortby] = useState("Default");
 
    const states = useSelector((store) => store.todo);
-   const { todos } = states;
+   const { todos, searchText } = states;
+
+   function handleSearchText(e) {
+      let val = e.target.value;
+      dispatch(setState("searchText", val));
+   }
 
    function gotoAddPage() {
       naviage("/add");
@@ -62,6 +67,8 @@ export default function TopOptions() {
             <input
                className="lap:w-80 lap:col-span-1 mob:col-span-2 h-8 border-2 border-gray-800 rounded-lg text-xl p-1"
                placeholder="search"
+               value={searchText}
+               onChange={handleSearchText}
             />
 
             <div>
@@ -81,7 +88,7 @@ export default function TopOptions() {
                className={`w-12 p-1 ml-2 rounded-md 
                   text-gray-800 font-semibold 
                   shadow-gray-400
-                  justify-self-end
+                  mob:justify-self-end
                   mobM:justify-self-start
                   `}
                onClick={gotoAddPage}

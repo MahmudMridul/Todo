@@ -3,13 +3,10 @@ import ListItem from "./ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllTodos } from "../todoSlice";
 
-export default function List() {
-   const dispatch = useDispatch();
-   const states = useSelector((store) => store.todo);
-   const { todos } = states;
-   useEffect(() => {
-      dispatch(getAllTodos());
-   }, []);
+export default function List({ todos }) {
+   // useEffect(() => {
+   //    console.log(searchText);
+   // }, [searchText]);
 
    return (
       <div className="grid lap:grid-cols-3 tabL:grid-cols-2 gap-x-5 gap-y-1">

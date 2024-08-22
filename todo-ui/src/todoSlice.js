@@ -3,12 +3,15 @@ import { urls } from "./todoUtils";
 
 const initialState = {
    todos: [],
+   displayedTodos: [],
 
    popupMsg: "Test popup design",
    popupOpen: false,
    popupStatus: "error", // default, success, warning, info, error
 
    isLoading: false,
+
+   searchText: "",
 };
 
 export const getAllTodos = createAsyncThunk(
@@ -154,13 +157,13 @@ export const todoSlice = createSlice({
             state.isLoading = false;
          })
 
-         .addCase(removeItem.pending, (state, action) => {})
-         .addCase(removeItem.fulfilled, (state, action) => {})
-         .addCase(removeItem.rejected, (state, action) => {})
+         .addCase(removeItem.pending, (state, action) => { })
+         .addCase(removeItem.fulfilled, (state, action) => { })
+         .addCase(removeItem.rejected, (state, action) => { })
 
-         .addCase(toggleIsCompleted.pending, (state, action) => {})
-         .addCase(toggleIsCompleted.fulfilled, (state, action) => {})
-         .addCase(toggleIsCompleted.rejected, (state, action) => {})
+         .addCase(toggleIsCompleted.pending, (state, action) => { })
+         .addCase(toggleIsCompleted.fulfilled, (state, action) => { })
+         .addCase(toggleIsCompleted.rejected, (state, action) => { })
 
          .addCase(addItem.pending, (state, action) => {
             state.isLoading = true;

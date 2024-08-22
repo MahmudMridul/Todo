@@ -85,3 +85,15 @@ export function truncateString(str, n) {
    }
    return str;
 }
+
+export function filterItems(text, items) {
+   text = text.toLowerCase();
+   if (text === "") return items;
+   const list = items.filter(
+      item => item.title.toLowerCase().includes(text) ||
+         item.description.toLowerCase().includes(text) ||
+         item.comment.toLowerCase().includes(text)
+   );
+   console.log("Filtered List", list);
+   return list;
+}
