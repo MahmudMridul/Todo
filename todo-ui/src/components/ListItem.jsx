@@ -56,13 +56,14 @@ export default function ListItem({
             completed || expired ? "bg-gray-300" : ""
          }`}
       >
-         <div
+         {/* commented this because not required */}
+         {/*<div
             className={`${
                !completed && expired ? "block" : "hidden"
             } font-bold text-white p-1 text-center w-24 rounded-xl bg-rose-700`}
          >
             Overdue!
-         </div>
+         </div>*/}
          {/* Title */}
          <div className="text-xl font-semibold mb-2">{title}</div>
          {/* Description */}
