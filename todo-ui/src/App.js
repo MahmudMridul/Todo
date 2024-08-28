@@ -7,11 +7,12 @@ import TopOptions from './components/TopOptions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllTodos, setState } from './todoSlice';
 import { filterItems } from './todoUtils';
+import ItemModal from './components/ItemModal';
 
 export default function App() {
    const dispatch = useDispatch();
    const states = useSelector((store) => store.todo);
-   const { todos, searchText, displayedTodos } = states;
+   const { todos, searchText, displayedTodos, itemModalOpen } = states;
 
    useEffect(() => {
       dispatch(getAllTodos());
@@ -23,12 +24,17 @@ export default function App() {
    }, [searchText, todos]);
 
    return (
-      <main className='container p-2'>
-         <Popup />
-         <Loading />
-         <Header headerText={"Todos"} />
-         <TopOptions />
-         <List todos={displayedTodos} />
-      </main>
+      <>
+         {itemModalOpen ? <ItemModal /> : null}
+         <main className='container p-2'>
+            <Popup />
+            <Loading />
+
+            <Header headerText={"Todos"} />
+            <TopOptions />
+            <List todos={displayedTodos} />
+         </main>
+      </>
+
    )
 }

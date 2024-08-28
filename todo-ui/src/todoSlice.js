@@ -12,6 +12,12 @@ const initialState = {
    isLoading: false,
 
    searchText: "",
+
+   itemModalOpen: false,
+   mTitle: "",
+   mDesc: "",
+   mComm: "",
+   mDue: "",
 };
 
 export const getAllTodos = createAsyncThunk(
@@ -133,6 +139,19 @@ export const todoSlice = createSlice({
             state[name] = value;
          },
       },
+      clearModalValues: (state) => {
+         state.mTitle = "";
+         state.mDesc = "";
+         state.mComm = "";
+         state.mDue = "";
+      },
+      setModalValues: (state, action) => {
+         const { mTitle, mDesc, mComm, mDue } = action.payload;
+         state.mTitle = mTitle;
+         state.mDesc = mDesc;
+         state.mComm = mComm;
+         state.mDue = mDue;
+      }
    },
    extraReducers: (builder) => {
       builder
@@ -203,5 +222,5 @@ export const todoSlice = createSlice({
    },
 });
 
-export const { setState } = todoSlice.actions;
+export const { setState, clearModalValues, setModalValues } = todoSlice.actions;
 export default todoSlice.reducer;

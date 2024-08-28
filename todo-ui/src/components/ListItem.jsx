@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
    getAllTodos,
    removeItem,
+   setModalValues,
    setState,
    toggleIsCompleted,
 } from "../todoSlice";
@@ -50,11 +51,24 @@ export default function ListItem({
       navigate(`/edit/${id}`);
    }
 
+   function openModal() {
+      dispatch(
+         setModalValues({
+            mTitle: title,
+            mDesc: desc,
+            mComm: comm,
+            mDue: formatDateString(deadline),
+         })
+      );
+      dispatch(setState("itemModalOpen", true));
+   }
+
    return (
       <div
          className={`h-48 my-8 rounded-2xl p-4 border-gray-300 shadow-lg hover:shadow-2xl hover:scale-101 ${
             completed || expired ? "bg-gray-300" : ""
          }`}
+         onClick={openModal}
       >
          {/* commented this because not required */}
          {/*<div
