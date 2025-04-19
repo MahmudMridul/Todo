@@ -1,6 +1,6 @@
 # Todo
 
-Todo is a CRUD application built with `.NET 9`, `Entity Framework`, `React` and `MS SQL Server`.
+Todo is a CRUD application built with `.NET 9`, `Entity Framework`, `React`, `Tailwind CSS` and `MS SQL Server`.
 
 ## Functionalities
 
