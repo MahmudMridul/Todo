@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using TodoAPI.Db;
-using TodoAPI.Db.IDb;
 using TodoAPI.Repository;
 using TodoAPI.Repository.IRepository;
 
@@ -20,23 +19,13 @@ namespace TodoAPI
             // Add repository
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-            // Add db context
-            bool useInMemoryDb = builder.Configuration.GetValue<bool>("UseInMemoryDb");
-
-            if (useInMemoryDb)
-            {
-                builder.Services.AddDbContext<InMemoryContext>(
-                    options => options.UseInMemoryDatabase("InMemoryDb")
-                );
-                builder.Services.AddScoped<IDbContext, InMemoryContext>();
-            }
-            else
-            {
-                builder.Services.AddDbContext<TodoContext>(
-                op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
-                );
-                builder.Services.AddScoped<IDbContext, TodoContext>();
-            }
+            
+            // Db context configuration
+            builder.Services.AddDbContext<TodoContext>(
+            op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+            );
+            builder.Services.AddScoped<TodoContext>();
+            
 
             //Add serilog
             builder.Host.UseSerilog((context, configuration) => 

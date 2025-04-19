@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TodoAPI.Db.IDb;
+using TodoAPI.Db;
 using TodoAPI.Models;
 using TodoAPI.Repository.IRepository;
 
@@ -7,9 +7,9 @@ namespace TodoAPI.Repository
 {
     public class ItemRepository : IItemRepository
     {
-        private readonly IDbContext _db;
+        private readonly TodoContext _db;
 
-        public ItemRepository(IDbContext db)
+        public ItemRepository(TodoContext db)
         {
             _db = db;
         }
@@ -49,13 +49,6 @@ namespace TodoAPI.Repository
             _db.Items.Remove(item);
             await _db.SaveChangesAsync();
             return item;
-        }
-
-        
-
-
-
-
-        
+        }        
     }
 }
