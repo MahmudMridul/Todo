@@ -1,7 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.EntityFrameworkCore.SqlServer;
 using TodoAPI.Db;
 using TodoAPI.Repository;
 using TodoAPI.Repository.IRepository;
@@ -19,18 +19,20 @@ namespace TodoAPI
             // Add repository
             builder.Services.AddScoped<IItemRepository, ItemRepository>();
 
-            
+
             // Db context configuration
             builder.Services.AddDbContext<TodoContext>(
-            op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
-            );
+                op => op.UseSqlServer(
+                    builder.Configuration.GetConnectionString("Default"),
+                op => op.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null)
+            ));
             builder.Services.AddScoped<TodoContext>();
             
 
             //Add serilog
-            builder.Host.UseSerilog((context, configuration) => 
-                configuration.ReadFrom.Configuration(context.Configuration)
-            );
+            //builder.Host.UseSerilog((context, configuration) => 
+            //    configuration.ReadFrom.Configuration(context.Configuration)
+            //);
             
             // Add CORS
             builder.Services.AddCors(ops => 
@@ -51,18 +53,27 @@ namespace TodoAPI
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
+
+    
 
             var app = builder.Build();
+
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                IServiceProvider services = scope.ServiceProvider;
+                TodoContext context = services.GetRequiredService<TodoContext>();
+                context.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
             //Serilog configs
-            app.UseSerilogRequestLogging();
+            //app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
 
