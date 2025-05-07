@@ -1,8 +1,11 @@
+name: TodoApp
 services:
   api:
     build:
       context: ./TodoAPI
       dockerfile: Dockerfile
+    image: todo-api
+    container_name: todo-api
     ports:
       - "5142:80"
       - "7193:443"
@@ -14,27 +17,41 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=StrongPassword
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-      - ConnectionStrings__Default=Server=sqlserver;Database=Todo;User Id=sa;Password=Strong!Passw0rd;TrustServerCertificate=True
+      - ConnectionStrings__Default=Server=sqlserver;Database=Todo;User Id=sa;Password=Strong_Passw0rd;TrustServerCertificate=True
     volumes:
       - ./certs:/https:ro
+  ui:
+    build:
+      context: ./todo-ui
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API=https://localhost:7193/api/Item
+    image: todo-ui
+    container_name: todo-ui
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: todo-sqlserver
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Strong!Passw0rd
+      - SA_PASSWORD=Strong_Passw0rd
     ports:
-      - "1434:1433"
+      - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
     healthcheck:
       test:
-        [
-          "CMD-SHELL",
-          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Strong!Passw0rd -Q 'SELECT 1' || exit 1",
-        ]
-      interval: 10s
-      timeout: 3s
+        ["CMD", "/bin/bash", "-c", "echo > /dev/tcp/localhost/1433 || exit 1"]
+      interval: 20s
+      timeout: 10s
       retries: 10
-      start_period: 10s
+      start_period: 60s
 volumes:
   sqlserver_data:
+networks:
+  default:
+    driver: bridge
+    name: todo-network
