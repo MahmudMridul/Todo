@@ -25,7 +25,7 @@ services:
       context: ./todo-ui
       dockerfile: Dockerfile
       args:
-        - REACT_APP_API=https://localhost:7193/api/Item
+        - REACT_APP_API=https://localhost:7193/api/Item/
     image: todo-ui
     container_name: todo-ui
     ports:
