@@ -6,119 +6,168 @@ import { useDispatch } from "react-redux";
 import { getAllTodos, updateItem } from "../todoSlice";
 
 export function loader({ params }) {
-   const id = parseInt(params.id, 10);
-   const todos = store.getState().todo.todos;
-   const item = todos.find((obj) => obj.id === id);
-   return item === undefined ? null : item;
+	const id = parseInt(params.id, 10);
+	const todos = store.getState().todo.todos;
+	const item = todos.find((obj) => obj.id === id);
+	return item === undefined ? null : item;
 }
 
 export default function EditItem() {
-   const { id, title, description, comment, deadline } = useLoaderData();
+	const { id, title, description, comment, deadline } = useLoaderData();
 
-   const navigate = useNavigate();
-   const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-   const [date, time] = splitDateTime(deadline);
+	const [date, time] = splitDateTime(deadline);
 
-   const [eTitle, seteTitile] = useState(title);
-   const [eDescription, seteDescription] = useState(description);
-   const [eComment, seteComment] = useState(comment);
-   const [eDate, seteDate] = useState(date);
-   const [eTime, seteTime] = useState(time);
+	const [eTitle, seteTitile] = useState(title);
+	const [eDescription, seteDescription] = useState(description);
+	const [eComment, seteComment] = useState(comment);
+	const [eDate, seteDate] = useState(date);
+	const [eTime, seteTime] = useState(time);
 
-   function handleTitle(event) {
-      const val = event.target.value;
-      seteTitile(val);
-   }
+	function handleTitle(event) {
+		const val = event.target.value;
+		seteTitile(val);
+	}
 
-   function handleDesc(event) {
-      const val = event.target.value;
-      seteDescription(val);
-   }
+	function handleDesc(event) {
+		const val = event.target.value;
+		seteDescription(val);
+	}
 
-   function handleComment(event) {
-      const val = event.target.value;
-      seteComment(val);
-   }
+	function handleComment(event) {
+		const val = event.target.value;
+		seteComment(val);
+	}
 
-   function handleDate(event) {
-      const val = event.target.value;
-      seteDate(val);
-   }
+	function handleDate(event) {
+		const val = event.target.value;
+		seteDate(val);
+	}
 
-   function handleTime(event) {
-      const val = event.target.value;
-      seteTime(val);
-   }
+	function handleTime(event) {
+		const val = event.target.value;
+		seteTime(val);
+	}
 
-   function handleSave() {
-      const date = combineDateTime(eDate, eTime);
-      const obj = {
-         id: id,
-         title: eTitle,
-         description: eDescription,
-         comment: eComment,
-         deadline: date,
-      };
-      dispatch(updateItem(obj)).then(() => {
-         navigate("/");
-         dispatch(getAllTodos());
-      });
-   }
+	function handleSave() {
+		const date = combineDateTime(eDate, eTime);
+		const obj = {
+			id: id,
+			title: eTitle,
+			description: eDescription,
+			comment: eComment,
+			deadline: date,
+		};
+		dispatch(updateItem(obj)).then(() => {
+			navigate("/");
+			dispatch(getAllTodos());
+		});
+	}
 
-   return (
-      <main className="container p-2 flex">
-         <div className="grid grid-cols-6 gap-y-5 mt-10">
-            <label className="col-span-2 text-xl">Title *</label>
-            <input
-               type="text"
-               value={eTitle}
-               onChange={handleTitle}
-               required
-               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
-            />
+	return (
+		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+			<main className="container mx-auto px-4 py-8 max-w-2xl">
+				{/* Header */}
+				<div className="text-center mb-8">
+					<h1 className="text-3xl font-bold text-gray-800 mb-2">Edit Todo</h1>
+					<p className="text-gray-600">Update your task details</p>
+				</div>
 
-            <label className="col-span-2 text-xl">Description</label>
-            <textarea
-               type="text"
-               value={eDescription}
-               onChange={handleDesc}
-               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
-            />
+				{/* Form Card */}
+				<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+					<div className="space-y-6">
+						{/* Title Input */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-2">
+								Title <span className="text-red-500">*</span>
+							</label>
+							<input
+								type="text"
+								value={eTitle}
+								onChange={handleTitle}
+								required
+								placeholder="Enter todo title..."
+								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+							/>
+						</div>
 
-            <label className="col-span-2 text-xl">Comment</label>
-            <textarea
-               type="text"
-               value={eComment}
-               onChange={handleComment}
-               className="col-span-4 border-2 tabS:w-80 h-20 rounded-md text-xl"
-            />
+						{/* Description */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-2">
+								Description
+							</label>
+							<textarea
+								value={eDescription}
+								onChange={handleDesc}
+								placeholder="Add more details about this todo..."
+								rows={4}
+								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+							/>
+						</div>
 
-            <label className="col-span-2 text-xl">Due Date *</label>
-            <input
-               type="date"
-               value={eDate}
-               onChange={handleDate}
-               required
-               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
-            />
+						{/* Comment */}
+						<div>
+							<label className="block text-sm font-medium text-gray-700 mb-2">
+								Notes
+							</label>
+							<textarea
+								value={eComment}
+								onChange={handleComment}
+								placeholder="Any additional notes or comments..."
+								rows={3}
+								className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+							/>
+						</div>
 
-            <label className="col-span-2 text-xl">Due Time *</label>
-            <input
-               type="time"
-               value={eTime}
-               onChange={handleTime}
-               required
-               className="col-span-4 border-2 tabS:w-80 h-8 rounded-md text-xl"
-            />
+						{/* Date and Time Grid */}
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-2">
+									Due Date <span className="text-red-500">*</span>
+								</label>
+								<input
+									type="date"
+									value={eDate}
+									onChange={handleDate}
+									required
+									className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+								/>
+							</div>
 
-            <button
-               className="w-20 p-1 bg-gray-800 rounded-md text-white font-semibold"
-               onClick={handleSave}
-            >
-               Save
-            </button>
-         </div>
-      </main>
-   );
+							<div>
+								<label className="block text-sm font-medium text-gray-700 mb-2">
+									Due Time
+								</label>
+								<input
+									type="time"
+									value={eTime}
+									onChange={handleTime}
+									className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+								/>
+							</div>
+						</div>
+
+						{/* Action Buttons */}
+						<div className="flex gap-4 pt-4">
+							<button
+								onClick={() => navigate("/")}
+								className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all font-medium"
+							>
+								Cancel
+							</button>
+							<button
+								onClick={handleSave}
+								disabled={!eTitle.trim()}
+								className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-xl transition-all font-medium"
+							>
+								Save Changes
+							</button>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+	);
 }
